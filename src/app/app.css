@@ -1,0 +1,10 @@
+nav {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+nav a {
+  text-decoration: underline;
+  cursor: pointer;
+}
