@@ -1,0 +1,49 @@
+<div class="login-container">
+  <div class="container welcome-box">
+    <h2>DigiClips</h2>
+  </div>
+  <div class="container login-box">
+    <input autocomplete="nope" id="email-input" type="text" class="form-control login-item" placeholder="Email Address" [(ngModel)]="email" (keyup.enter)="loginclicked()" autofocus>
+    <input autocomplete="nope" id="password-input" type="password" class="form-control login-item" placeholder="Password" [(ngModel)]="password" (keyup.enter)="loginclicked()">
+    @if (errorMessage.length > 0) {
+      <div class="alert alert-danger">
+        {{errorMessage}}
+      </div>
+    }
+
+    <div class="center-checkbox">
+      <label class="login-text small">
+        <input type="checkbox" (click)="togglePasswordVisibility()"> Show Password
+      </label>
+    </div>
+
+    <div class="remember-me">
+      <label class="login-text small">
+        <input type="checkbox" [(ngModel)]="rememberMe">Remember Me
+      </label>
+    </div>
+
+    <div class="menu-selection">
+      <p class="login-text small">Select a menu (choose one):</p>
+      <div class="menu-options">
+        @for (option of menuOptions; track option) {
+          <label class="menu-option">
+            <input
+              type="checkbox"
+              [checked]="selectedMenu === option.key"
+              (change)="onMenuToggle(option.key, $event)"
+              >
+              <span>{{ option.label }}</span>
+            </label>
+          }
+        </div>
+      </div>
+
+      <button id="login-btn" class="btn btn-primary btn-block login-btn" (click)="loginclicked()">Login</button>
+
+      <div class="links-container">
+        <a routerLink="/register" id="register-link" class="login-text small">Register</a>
+        <a routerLink="/passwordRecovery" id="forgot-password" class="login-text small">Forgot Password?</a>
+      </div>
+    </div>
+  </div>

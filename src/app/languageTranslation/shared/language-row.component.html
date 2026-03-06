@@ -1,0 +1,14 @@
+<div class="language-row">
+  <span class="letter">{{ letter }}</span>
+
+  <span class="languages">
+    @for (lang of languages; track lang) {
+      <button
+        class="btn btn-link language-link p-0"
+        (click)="onLanguageSelect(lang)"
+        >
+        {{ lang }}
+      </button>
+    }
+  </span>
+</div>

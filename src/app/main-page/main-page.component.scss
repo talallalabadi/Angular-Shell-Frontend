@@ -1,0 +1,140 @@
+.main-page {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.content {
+  max-width: 960px;
+  width: 100%;
+  text-align: center;
+}
+
+.headline {
+  margin-bottom: 2.5rem;
+
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1e293b;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    margin-bottom: 0.75rem;
+    color: #0f172a;
+  }
+
+  .subheading {
+    font-size: 1.15rem;
+    letter-spacing: 0.35rem;
+    text-transform: uppercase;
+    color: #334155;
+  }
+}
+
+.problem {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: 0 12px 25px rgba(15, 23, 42, 0.08);
+  margin-bottom: 3rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    color: #1e293b;
+  }
+
+  p {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #334155;
+  }
+}
+
+.actions {
+  h2 {
+    font-size: 1.5rem;
+    letter-spacing: 0.15rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+  }
+}
+
+.action-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+  }
+}
+
+.primary {
+  background-color: #1d4ed8;
+  color: #ffffff;
+  box-shadow: 0 12px 25px rgba(29, 78, 216, 0.15);
+}
+
+.secondary {
+  background-color: #ffffff;
+  color: #1d4ed8;
+  border: 1px solid rgba(29, 78, 216, 0.35);
+}
+
+.tertiary {
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.6;
+    box-shadow: none;
+
+    &:hover,
+    &:focus {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .main-page {
+    padding: 3rem 1rem;
+  }
+
+  .problem {
+    padding: 1.5rem;
+  }
+}

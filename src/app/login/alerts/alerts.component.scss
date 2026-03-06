@@ -1,0 +1,101 @@
+.alerts-container {
+  padding-bottom: 20px;
+}
+
+.section-title {
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 25px;
+  font-family: "Lato", sans-serif;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
+.alert-box {
+  margin: 10px;
+  padding: 10px;
+}
+
+.card {
+  padding: 20px 20px 20px 10px;
+}
+
+.card-label {
+  font-weight: bold;
+}
+
+.col-form-label {
+  font: 15px "Lato", sans-serif;
+}
+
+.row {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+}
+
+.no-alerts {
+  margin: 15px;
+}
+
+.btn-margin {
+  margin: 5px;
+}
+
+.multi-select {
+  padding-left: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+hr {
+  margin: 12px;
+}
+.time{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  //align-items: center;
+}
+.time label{
+  width: 250px;
+  white-space: nowrap;
+}
+
+
+.date{
+  //display: flex;
+  //flex-direction: row;
+  //justify-content: space-around;
+}
+
+.date label{
+  //width: 300px;
+  //white-space: nowrap;
+}
+
+.format{
+  display: flex;
+  flex-direction: column;
+}
+.number {
+  display: flex;
+  flex-direction: row;
+}
+.label{
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+.form-group{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.CTA{
+  margin: 10px auto;
+
+}
+
+//fix width of search page box, not sure what it's called though.

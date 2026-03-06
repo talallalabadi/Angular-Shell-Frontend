@@ -1,0 +1,131 @@
+<div class="container welcome-box">
+  <h3>DigiClips</h3>
+  <h5>Media Analytics Charts and Graphs</h5>
+</div>
+<div class="container search-box">
+  <div class="row select-group">
+    <label class="col-form-label right-align-label col-md-3">
+      Media
+    </label>
+    <select [(ngModel)] = "mediaDropDown" class="custom-select col-md-3">
+      @for (med of media; track med) {
+        <option>
+          {{med}}
+        </option>
+      }
+    </select>
+    <label class="col-form-label right-align-label col-md-3">
+      TV Station
+    </label>
+    <select [(ngModel)] = "tvDropDown" class="custom-select col-md-3">
+      @for (tv of tvChannel; track tv) {
+        <option>
+          {{tv}}
+        </option>
+      }
+    </select>
+  </div>
+  <div class="row select-group">
+    <label class="col-form-label right-align-label col-md-3">
+      Radio
+    </label>
+    <select [(ngModel)] = "radioDropDown" class="custom-select col-md-3">
+      @for (radio of radioChannel; track radio) {
+        <option>
+          {{radio}}
+        </option>
+      }
+    </select>
+    <label class="col-form-label right-align-label col-md-3">
+      Type
+    </label>
+    <select [(ngModel)]= "typeDropDown" class="custom-select col-md-3">
+      @for (tp of type; track tp) {
+        <option >
+          {{tp}}
+        </option>
+      }
+    </select>
+  </div>
+  <div class="row select-group">
+    <label for="start-date-input" class="col-form-label right-align-label col-md-3">
+      Start Date
+    </label>
+    <input [(ngModel)]="startDate" class="form-control col-md-3" type="date">
+    <label for="end-date-input" class="col-form-label right-align-label col-md-3">
+      End Date
+    </label>
+    <input [(ngModel)]= "endDate" class="form-control col-md-3" type="date">
+  </div>
+</div>
+<div id="buttons">
+  @if (!showAdValue && !showAudience && !showCalAdValue && !showCalPublicityValue) {
+    <button id="create-button" (click)="create()" class="btn btn-outline-primary">Generate</button>
+  }
+  @if (showAdValue || showAudience || showCalAdValue || showCalPublicityValue) {
+    <button id="create-button" (click)="createAnother()" class="btn btn-outline-primary">Generate Another Report</button>
+  }
+</div>
+
+
+@if (showAudience) {
+  <div class="chart-wrapper">
+    <canvas baseChart
+      [datasets]="audience"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+}
+
+@if (showAdValue) {
+  <div class="chart-wrapper">
+    <canvas baseChart
+      [datasets]="adValue"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+}
+
+@if (showCalAdValue) {
+  <div class="chart-wrapper">
+    <canvas baseChart
+      [datasets]="calAdValue"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+}
+
+@if (showCalPublicityValue) {
+  <div class="chart-wrapper">
+    <canvas baseChart
+      [datasets]="calPublicityValue"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+}
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+/*
+**Split up short hand font in order to add further custimization
+**Added a standard sizing
+*/
+
+html{
+  font-size: 62.5%;
+}
+
+.section-title { 
+    margin-top: 4rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+  }
+  
+
+.paragraph {
+  padding: 0.8rem 1.5rem; /*12.8px to 24px padding*/
+  font-size: 1.25rem;
+  text-align: center;
+  font-family: "Lato", sans-serif;
+  letter-spacing: 0.063rem;
+}
+
+.my-button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 0.363rem;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect */
+.my-button:hover {
+    background-color: #2980b9;
+  }
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh; 
+  }

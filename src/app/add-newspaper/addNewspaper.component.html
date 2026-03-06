@@ -1,0 +1,41 @@
+<div class="outermost-container">
+  <div class="container main-text-box">
+    Add a New Newspaper
+  </div>
+  <div class="container addNewspaper-box">
+    <div class="row">
+      <label for="name-input" class="col-form-label right-align-label col-md-3">
+        Newspaper Name
+      </label>
+      <input id="name-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.name">
+      <label for="country-input" class="col-form-label right-align-label col-md-3">
+        Country
+      </label>
+      <input id="country-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.country">
+    </div>
+    <div class="row">
+      <label for="state-input" class="col-form-label right-align-label col-md-3">
+        State/Province
+      </label>
+      <input id="state-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.state">
+      <label for="city-input" class="col-form-label right-align-label col-md-3">
+        City
+      </label>
+      <input id="city-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.city">
+    </div>
+    <div class="row">
+      <label for="home-URL-input" class="col-form-label right-align-label col-md-3">
+        URL to Newspaper's Home Page
+      </label>
+      <input id="home-URL-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.url">
+      <label for="rss-URL-input" class="col-form-label right-align-label col-md-3">
+        URL to Newspaper RSS Feed
+      </label>
+      <input id="rss-URL-input" class="form-control addNewspaper-item col-md-3" [(ngModel)]="newspaper.rss">
+    </div>
+    <div class="text-center">
+      <button [disabled]="!checkFilled()" class="btn btn-outline-primary submit-button"
+              (click)="addNewspaper()">Add Newspaper</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+.language-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 8px 0;
+    font-size: 1.1rem;
+  }
+  
+  .letter {
+    font-weight: bold;
+    width: 30px;
+  }
+  
+  .language-item {
+    margin-right: 10px;
+  }
+  
+  .language-link {
+    color: inherit !important;
+    text-decoration: none;
+    margin-right: 1rem;
+  }
+  
+  .language-link:hover {
+    text-decoration: underline;
+    color: inherit !important;
+  }
+  
+  :host {
+    display: block;
+    border-bottom: 1px solid #30333f;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }

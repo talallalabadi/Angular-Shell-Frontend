@@ -1,0 +1,235 @@
+<div class="transfer-container">
+  <h1>Media Transfer Request</h1>
+ <!-- Initial Button (File Input) -->
+  <div *ngIf="!fileSelected && !showEmailForm" class="container text-center">
+   <label for="file-upload" class="btn btn-primary btn-circle">
+     Upload Files
+     <input type="file" id="file-upload" class="hidden-file-input" (change)="onFileSelected($event)" multiple>
+   </label>
+ </div>
+
+ <!-- Email Drafting Screen -->
+ <div *ngIf="fileSelected && showEmailForm" class="email-drafting-screen">
+   <div class="container-full">
+     <h1 class="container-header">Select Files to Send to Recipient</h1>
+     <div class="drafting-container">
+       <div class="file-column">
+         <div class="file-header">
+         <h4>{{selectedFiles.length}} {{selectedFiles.length == 1 ? 'File' : 'Files'}}</h4>
+         <label class="add-files-btn">
+           +
+           <input type="file" class="hidden-file-input" 
+                  (change)="addFiles($event)" multiple>
+         </label>
+       </div>
+         <div class="file-list">
+           <div class="file-item" *ngFor="let file of selectedFiles; let i = index">
+             <span>{{ file.name }}</span>
+             <button class="remove-file" (click)="removeFile(i)">×</button>
+           </div>
+         </div>
+         
+       </div>
+
+       <div class="separator-column"></div>
+
+      <div class="email-column">
+        <div class="email-form">
+         <div class="email-scrollable-content">
+           <div class="form-group">
+             <input
+               type="email"
+               class="form-control"
+               id="sender-email"
+               [(ngModel)]="sender"
+               name="senderEmail"
+               placeholder="Enter Your Email"
+             />
+         </div>
+         <div class="form-group">
+          <!-- Show chip-container ONLY if there are emails -->
+          <div class="chip-container" *ngIf="recipientEmails.length > 0">
+            <span class="chip" *ngFor="let email of recipientEmails">
+              {{ email }}
+              <span class="remove-chip" (click)="removeEmail(email)">×</span>
+            </span>
+          </div>
+          <!-- Will enter the email chip if they press enter (keyup.enter) or click away (blur) -->
+          <input
+            type="text"
+            id="recipient-email"
+            name="recipientEmail"
+            class="form-control email-input-chip"
+            placeholder="Recipients' emails"
+            [(ngModel)]="currentEmail"
+            (keyup.enter)="addEmail($event)"
+            (blur)="addEmailOnBlur()"
+          />
+        </div>
+           
+           <div class="form-group">
+             <input
+               type="text"
+               class="form-control"
+               id="subject"
+               [(ngModel)]="subject"
+               name="subject"
+               placeholder="Subject"
+             />
+           </div>
+           <div class="form-group">
+             <textarea
+               class="form-control"
+               id="message"
+               [(ngModel)]="body"
+               name="message"
+               rows="5"
+               placeholder="Message"
+             ></textarea>
+           </div>
+          </div>
+           <div class="send-button-container">
+            <div class="send-button-container">
+              <button type="button" class="btn btn-primary" (click)="uploadFile()">Send Email</button>
+            </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+<!-- Success/Error Messages (not in flexbox) -->
+<div *ngIf="successMessage && fileSelected" class="success-message">
+ {{ successMessage }}
+</div>
+<div *ngIf="errorMessage && fileSelected" class="error-message">
+ {{ errorMessage }}
+</div>
+<div *ngIf="warningMessage && fileSelected" class="warning-message">
+ {{ warningMessage }}
+</div>
+
+<progress-spinner [isLoading]="isUploading" [progress]="uploadProgress"></progress-spinner>
+
+<div class="admin-panel">
+  <h2>Admin Transfer Tools</h2>
+
+  <div class="admin-section">
+    <h3>List Transfers</h3>
+    <div class="admin-row">
+      <input type="number" min="1" [(ngModel)]="adminFilters.page" name="adminPage" placeholder="page">
+      <input type="number" min="1" [(ngModel)]="adminFilters.pageSize" name="adminPageSize" placeholder="pageSize">
+      <input type="text" [(ngModel)]="adminFilters.fileName" name="adminFileName" placeholder="fileName">
+      <input type="text" [(ngModel)]="adminFilters.senderEmail" name="adminSenderEmail" placeholder="senderEmail">
+      <input type="text" [(ngModel)]="adminFilters.recipientEmail" name="adminRecipientEmail" placeholder="recipientEmail">
+      <select [(ngModel)]="adminFilters.status" name="adminStatus">
+        <option value="">all</option>
+        <option value="active">active</option>
+        <option value="expired">expired</option>
+      </select>
+      <button class="btn btn-sm btn-primary" (click)="loadAdminTransfers()">Load</button>
+    </div>
+
+    <div class="admin-msg success-text" *ngIf="adminMessage">{{ adminMessage }}</div>
+    <div class="admin-msg error-text" *ngIf="adminError">{{ adminError }}</div>
+
+    <table class="admin-table" *ngIf="adminTransfers.length > 0">
+      <thead>
+        <tr>
+          <th>Transfer ID</th>
+          <th>Status</th>
+          <th>Expiry</th>
+          <th>Files</th>
+          <th>Recipients</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transfer of adminTransfers">
+          <td>{{ transfer.transferId }}</td>
+          <td>{{ transfer.status }}</td>
+          <td>{{ transfer.expiryDate | date:'short' }}</td>
+          <td>{{ transfer.fileNames.join(', ') }}</td>
+          <td>{{ transfer.recipients.join(', ') }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteTransfer(transfer.transferId)">Delete</button>
+            <input
+              class="days-input"
+              type="number"
+              min="1"
+              [(ngModel)]="extendDaysByTransferId[transfer.transferId]"
+              [name]="'extendDays-' + transfer.transferId"
+              placeholder="days"
+            >
+            <button class="btn btn-sm btn-secondary" (click)="extendTransferExpiry(transfer.transferId)">Extend</button>
+            <button class="btn btn-sm btn-info" (click)="loadDownloadHistory(transfer.transferId)">History</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="admin-section">
+    <h3>Bulk Delete</h3>
+    <textarea
+      rows="3"
+      [(ngModel)]="bulkDeleteInput"
+      name="bulkDeleteInput"
+      placeholder="transfer IDs (comma/newline separated)"
+    ></textarea>
+    <div class="admin-row">
+      <button class="btn btn-sm btn-danger" (click)="runBulkDelete()">Run Bulk Delete</button>
+    </div>
+    <div *ngIf="bulkDeleteSummary">
+      <div>Deleted: {{ (bulkDeleteSummary.deleted || []).length }}</div>
+      <div>Failed: {{ (bulkDeleteSummary.failed || []).length }}</div>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <h3>Download History</h3>
+    <div class="admin-row">
+      <input type="text" [(ngModel)]="selectedHistoryTransferId" name="historyTransferId" placeholder="transferId">
+      <input type="number" min="1" [(ngModel)]="historyFilters.page" name="historyPage" placeholder="page">
+      <input type="number" min="1" [(ngModel)]="historyFilters.pageSize" name="historyPageSize" placeholder="pageSize">
+      <select [(ngModel)]="historyFilters.success" name="historySuccess">
+        <option value="">all</option>
+        <option value="true">true</option>
+        <option value="false">false</option>
+      </select>
+      <input type="text" [(ngModel)]="historyFilters.fileName" name="historyFileName" placeholder="fileName">
+      <input type="text" [(ngModel)]="historyFilters.recipientEmail" name="historyRecipientEmail" placeholder="recipientEmail">
+      <button class="btn btn-sm btn-primary" (click)="loadDownloadHistory()">Load History</button>
+    </div>
+
+    <table class="admin-table" *ngIf="downloadHistory.length > 0">
+      <thead>
+        <tr>
+          <th>File</th>
+          <th>Recipient</th>
+          <th>Time</th>
+          <th>Success</th>
+          <th>IP</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of downloadHistory">
+          <td>{{ item.fileName }}</td>
+          <td>{{ item.recipientEmail }}</td>
+          <td>{{ item.attemptedAt | date:'short' }}</td>
+          <td>{{ item.success }}</td>
+          <td>{{ item.ipAddress }}</td>
+          <td>{{ item.errorMessage }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="downloadHistory.length > 0">
+      Total history records: {{ historyPagination.totalRecords }}
+    </div>
+  </div>
+
+  <div *ngIf="adminLoading" class="admin-loading">Loading...</div>
+</div>
+</div>

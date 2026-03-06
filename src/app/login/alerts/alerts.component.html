@@ -1,0 +1,521 @@
+<div class="alerts-container container">
+  <div class="section-title">
+    Create an email alert
+  </div>
+  <div class="alert-box">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-text container">
+          <accordion>
+            <accordion-group heading="Search">
+              <div class="row">
+                <label class="col-form-label col-md-3">
+                  Keyword and Subject Search
+                </label>
+                <input autocomplete="nope" type="text" class="form-control search-item col-md-9" [(ngModel)]="newAlert.keywords_string">
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Boolean Search
+              </button>
+              <div id="collapseBasic" [collapse]="isCollapsed">
+                <div class="row">
+                  <label class="col-form-label col-md-3">
+                    Advanced Boolean Search
+                  </label>
+                  <input autocomplete="nope"  type="text" class="form-control search-item col-md-9" [(ngModel)]="newAlert.boolean_search_string">
+                </div>
+              </div>
+            </accordion-group>
+            <accordion-group heading="Media">
+              <div class="row">
+                <label class="col-form-label col-md-3">
+                  Add Media
+                </label>
+                <select (change)="addMediaFilter($event)" class="custom-select col-md-3">
+                  <option value="undefined" selected hidden>Select one</option>
+                  <option>Magazine</option>
+                  <option>Newspaper</option>
+                  <option>Television</option>
+                  <option>Social Media</option>
+                  <option>Radio</option>
+                </select>
+              </div>
+              <hr/>
+              <br/>
+              @for (filter of newAlert.mediaFilters | keyvalue; track filter) {
+                <div >
+                  <div class="row">
+                    <label class="col-form-label col-md-3">
+                      Media
+                    </label>
+                    <select [(ngModel)]="filter.value.type" (change)="onChangeFilter($event, filter.key)" class="custom-select col-md-3">
+                      <option selected> </option>
+                      <option>Magazine</option>
+                      <option>Newspaper</option>
+                      <option>Television</option>
+                      <option>Social Media</option>
+                      <option>Radio</option>
+                    </select>
+                    <button class="btn btn-outline-danger btn-sm" style="margin-left: 6px;" (click)="removeMediaFilter(filter.key)">Remove</button>
+                  </div>
+                  @if (filter.value.type === 'Radio' || filter.value.type === 'Television') {
+                    <div class="row">
+                      <label class="col-form-label col-md-3">
+                        Country
+                      </label>
+                      <ng-multiselect-dropdown
+                        [placeholder]="''"
+                        [settings]="dropdownSettings"
+                        [data]="countryList"
+                        [(ngModel)]="filter.value.countries"
+                        class="col-md-8 multi-select"
+                      ></ng-multiselect-dropdown>
+                      @if (filter.value.countries.length == 1) {
+                        <label class="col-form-label col-md-3">
+                          Market
+                        </label>
+                      }
+                      @if (filter.value.countries.length == 1) {
+                        <ng-multiselect-dropdown
+                          [placeholder]="''"
+                          [settings]="dropdownSettings"
+                          [data]="marketList"
+                          [(ngModel)]="filter.value.markets"
+                          class="col-md-8 multi-select"
+                        ></ng-multiselect-dropdown>
+                      }
+                    </div>
+                  }
+                  @if (filter.value.type === 'Social Media') {
+                    <div class="row">
+                      <label class="col-form-label col-md-3">
+                        Social Media
+                      </label>
+                      <ng-multiselect-dropdown
+                        [placeholder]="''"
+                        [settings]="dropdownSettings"
+                        [data]="socialMediaList"
+                        [(ngModel)]="filter.value.mediaNames"
+                        class="col-md-8 multi-select"
+                      ></ng-multiselect-dropdown>
+                    </div>
+                  }
+                  @if (filter.value.type === 'Newspaper') {
+                    <div class="row">
+                      <label class="col-form-label col-md-3">
+                        Newspaper
+                      </label>
+                      <ng-multiselect-dropdown
+                        [placeholder]="''"
+                        [settings]="dropdownSettings"
+                        [data]="newspaperList"
+                        [(ngModel)]="filter.value.newspaperNames"
+                        class="col-md-8 multi-select"
+                      ></ng-multiselect-dropdown>
+                    </div>
+                  }
+                  @if (filter.value.type === 'Magazine') {
+                    <div class="row">
+                      <label class="col-form-label col-md-3">
+                        Magazine
+                      </label>
+                      <ng-multiselect-dropdown
+                        [placeholder]="''"
+                        [settings]="dropdownSettings"
+                        [data]="magazineList"
+                        [(ngModel)]="filter.value.magazineNames"
+                        class="col-md-8 multi-select"
+                      ></ng-multiselect-dropdown>
+                    </div>
+                  }
+                  <hr/>
+                </div>
+              }
+            </accordion-group>
+            <accordion-group heading="Date & Time">
+              <div>
+                <div class="row">
+                  <label class="col-form-label col-md-3">
+                    Start Date
+                  </label>
+                  <input  class="form-control col-md-3"  type="date" placeholder="Datepicker" [(ngModel)]="newAlert.startDate">
+                  <label class="col-form-label col-md-3">
+                    End Date
+                  </label>
+                  <input  name="endDate" class="form-control col-md-3"  type="date" placeholder="Datepicker" [(ngModel)]="newAlert.endDate">
+                </div>
+              </div>
+              <br/>
+              <br/>
+              <div>
+                <div class="row">
+                  <label for="start-time-input" class="col-form-label right-align-label col-md-3">
+                    Start Time
+                  </label>
+                  <input name="start-time-input" class="form-control col-md-3" type="time" value="00:00" id="start-time-input"
+                    [(ngModel)]="newAlert.startTime">
+                    <!--                  <timepicker [(ngModel)]="newAlert.startTime"></timepicker>-->
+                    <label for="end-time-input" class="col-form-label right-align-label col-md-3">
+                      End Time
+                    </label>
+                    <input name="end-time-input" class="form-control col-md-3" type="time" value="00:00" id="end-time-input"
+                      [(ngModel)]="newAlert.endTime">
+                    </div>
+                    <!--                <div>-->
+                    <!--                  <label for="end-time-input" class="col-form-label right-align-label col-md-3">-->
+                    <!--                    End Time-->
+                  <!--                  </label>-->
+                  <!--                  <input name="end-time-input" class="form-control col-md-3" type="time" value="00:00" id="end-time-input"-->
+                  <!--                         [(ngModel)]="newAlert.endTime">-->
+                  <!--  &lt;!&ndash;                  <timepicker [(ngModel)]="newAlert.endTime"></timepicker>&ndash;&gt;-->
+                <!--                </div>-->
+              </div>
+            </accordion-group>
+            <accordion-group heading="Recipient">
+              <div class="select-group row">
+                <label class="col-form-label col-md-3">
+                  Recipient Email Addresses
+                </label>
+                <input type="text" (focusout)="getAlerts()" class="form-control search-item col-md-9" placeholder="comma-separated" [(ngModel)]="newAlert.emails">
+              </div>
+            </accordion-group>
+            <accordion-group heading="Format">
+              <div class="format">
+                <div class="numbers">
+                  <div>
+                    <label class="col-form-label col-md-3">
+                      Number of Results
+                    </label>
+                    <select [(ngModel)]="newAlert.numOfResults" class="custom-select col-md-3">
+                      <option selected> </option>
+                      <option>10</option>
+                      <option>20</option>
+                      <option>50</option>
+                      <option>100</option>
+                      <option>200</option>
+                      <option>500</option>
+                    </select>
+                  </div>
+                  <br/>
+                  <div>
+                    <label class="col-form-label col-md-3">
+                      Real Time Alerts
+                    </label>
+                    <select [(ngModel)]="newAlert.realTimeAlerts" class="custom-select col-md-3">
+                      <option selected> </option>
+                      <option>7 minutes</option>
+                      <option>20 minutes</option>
+                      <option>30 minutes</option>
+                      <option>60 minutes</option>
+                      <option>3 hours</option>
+                      <option>12 hours</option>
+                      <option>24 hours</option>
+                      <option>3 days</option>
+                      <option>7 days</option>
+                      <option>14 days</option>
+                      <option>30 days</option>
+                      <option>3 months</option>
+                      <option>6 months</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label for="report-format-check" class="label">
+                    Format of Reports
+                  </label>
+                  <form role="form">
+                    <div class="form-group" id="report-format-check">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="check" name="email" [(ngModel)]="newAlert.formatEmail"> Email
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="check" name="formatDoc" [(ngModel)]="newAlert.formatDoc"> Doc
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="check" name="excel" [(ngModel)]="newAlert.formatExcel"> Excel
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="check" name="formatPDF" [(ngModel)]="newAlert.formatPDF"> PDF
+                        </label>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="check" name="formatHTML" [(ngModel)]="newAlert.formatHTML"> HTML
+                        </label>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </accordion-group>
+          </accordion>
+
+
+
+          <!-- <button [disabled]="!newAlert.keywords_string || !newAlert.realTimeAlerts || !newAlert.emails" class="btn btn-outline-primary btn-sm edit-btn" (click)="create()">create</button> -->
+          <button type="button" (click)="create()" class="btn btn-primary btn-lg CTA">
+            Create
+          </button>
+          <!--          <button class="btn btn-outline-primary btn-sm edit-btn" (click)="create()">create</button>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">
+    Manage current email alerts
+  </div>
+  @for (existingAlert of existingAlerts | keyvalue; track existingAlert) {
+    <div class="alert-box">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-text container">
+            <div class="row">
+              <label class="col-form-label col-md-3">
+                Keyword and Subject Search
+              </label>
+              <input type="text" autocomplete="nope"  class="form-control search-item col-md-9" [(ngModel)]="existingAlert.value.keywords_string" [readonly]="existingAlert.key != editableAlertId">
+            </div>
+            <div class="row">
+              <label class="col-form-label col-md-3">
+                Advanced Boolean Search
+              </label>
+              <input type="text" autocomplete="nope" class="form-control search-item col-md-9" [(ngModel)]="existingAlert.value.boolean_search_string" [readonly]="existingAlert.key != editableAlertId">
+            </div>
+            <hr/>
+            <div class="row">
+              <label class="col-form-label col-md-3">
+                Add Media
+              </label>
+              <select (change)="addMediaFilter($event, existingAlert.key)" class="custom-select col-md-3" [disabled]="existingAlert.key != editableAlertId">
+                <option value="undefined" selected hidden>Select one</option>
+                <option>Magazine</option>
+                <option>Newspaper</option>
+                <option>Television</option>
+                <option>Social Media</option>
+                <option>Radio</option>
+              </select>
+            </div>
+            <hr/>
+            @for (filter of existingAlert.value.mediaFilters | keyvalue; track filter) {
+              <div >
+                <div class="row">
+                  <label class="col-form-label col-md-3">
+                    Media
+                  </label>
+                  <select [(ngModel)]="filter.value.type" (change)="onChangeFilter($event, existingAlert.key, filter.key)" class="custom-select col-md-3" [disabled]="existingAlert.key != editableAlertId">
+                    <option selected> </option>
+                    <option>Magazine</option>
+                    <option>Newspaper</option>
+                    <option>Television</option>
+                    <option>Social Media</option>
+                    <option>Radio</option>
+                  </select>
+                  <button class="btn btn-outline-danger btn-sm" style="margin-left: 6px;" (click)="removeMediaFilter(existingAlert.key, filter.key)" [disabled]="existingAlert.key != editableAlertId">Remove</button>
+                </div>
+                @if (filter.value.type === 'Radio' || filter.value.type === 'Television') {
+                  <div class="row">
+                    <label class="col-form-label col-md-3">
+                      Country
+                    </label>
+                    <ng-multiselect-dropdown
+                      [placeholder]="''"
+                      [settings]="dropdownSettings"
+                      [data]="countryList"
+                      [(ngModel)]="filter.value.countries"
+                      class="col-md-8 multi-select"
+                      [disabled]="existingAlert.key != editableAlertId"
+                    ></ng-multiselect-dropdown>
+                    @if (filter.value.countries.length == 1) {
+                      <label class="col-form-label col-md-3">
+                        Market
+                      </label>
+                    }
+                    @if (filter.value.countries.length == 1) {
+                      <ng-multiselect-dropdown
+                        [placeholder]="''"
+                        [settings]="dropdownSettings"
+                        [data]="marketList"
+                        [(ngModel)]="filter.value.markets"
+                        class="col-md-8 multi-select"
+                        [disabled]="existingAlert.key != editableAlertId"
+                      ></ng-multiselect-dropdown>
+                    }
+                  </div>
+                }
+                @if (filter.value.type === 'Social Media') {
+                  <div class="row">
+                    <label class="col-form-label col-md-3">
+                      Social Media
+                    </label>
+                    <ng-multiselect-dropdown
+                      [placeholder]="''"
+                      [settings]="dropdownSettings"
+                      [data]="socialMediaList"
+                      [(ngModel)]="filter.value.mediaNames"
+                      class="col-md-8 multi-select"
+                      [disabled]="existingAlert.key != editableAlertId"
+                    ></ng-multiselect-dropdown>
+                  </div>
+                }
+                @if (filter.value.type === 'Newspaper') {
+                  <div class="row">
+                    <label class="col-form-label col-md-3">
+                      Newspaper
+                    </label>
+                    <ng-multiselect-dropdown
+                      [placeholder]="''"
+                      [settings]="dropdownSettings"
+                      [data]="newspaperList"
+                      [(ngModel)]="filter.value.newspaperNames"
+                      class="col-md-8 multi-select"
+                      [disabled]="existingAlert.key != editableAlertId"
+                    ></ng-multiselect-dropdown>
+                  </div>
+                }
+                @if (filter.value.type === 'Magazine') {
+                  <div class="row">
+                    <label class="col-form-label col-md-3">
+                      Magazine
+                    </label>
+                    <ng-multiselect-dropdown
+                      [placeholder]="''"
+                      [settings]="dropdownSettings"
+                      [data]="magazineList"
+                      [(ngModel)]="filter.value.magazineNames"
+                      class="col-md-8 multi-select"
+                      [disabled]="existingAlert.key != editableAlertId"
+                    ></ng-multiselect-dropdown>
+                  </div>
+                }
+                <hr/>
+              </div>
+            }
+            <div class="row">
+              <label class="col-form-label col-md-3">
+                Start Date
+              </label>
+              <input class="form-control col-md-3" type="date" placeholder="e.g. 04/06/2007" [(ngModel)]="existingAlert.value.startDate" [disabled]="existingAlert.key != editableAlertId">
+              <label for="start-time-input" class="col-form-label right-align-label col-md-3">
+                Start Time
+              </label>
+              <input name="start-time-input" class="form-control col-md-3" type="time" value="00:00" id="start-time-input"
+                [(ngModel)]="existingAlert.value.startTime" [disabled]="existingAlert.key != editableAlertId">
+              </div>
+              <div class="row">
+                <label class="col-form-label col-md-3">
+                  End Date
+                </label>
+                <input name="endDate" class="form-control col-md-3" type="date" placeholder="e.g. 04/06/20017" [(ngModel)]="existingAlert.value.endDate" [disabled]="existingAlert.key != editableAlertId">
+                <label for="end-time-input" class="col-form-label right-align-label col-md-3">
+                  End Time
+                </label>
+                <input name="end-time-input" class="form-control col-md-3" type="time" value="00:00" id="end-time-input"
+                  [(ngModel)]="existingAlert.value.endTime" [disabled]="existingAlert.key != editableAlertId">
+                </div>
+                <div class="select-group row">
+                  <label class="col-form-label col-md-3">
+                    Recipient Email Addresses
+                  </label>
+                  <input type="text" autocomplete="nope" class="form-control search-item col-md-9" placeholder="comma-separated" [(ngModel)]="existingAlert.value.emails" [readonly]="existingAlert.key != editableAlertId">
+                </div>
+                <div class="row">
+                  <label class="col-form-label col-md-3">
+                    Number of Results
+                  </label>
+                  <select [(ngModel)]="existingAlert.value.numOfResults" class="custom-select col-md-3" [disabled]="existingAlert.key != editableAlertId">
+                    <option selected> </option>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                    <option>200</option>
+                    <option>500</option>
+                  </select>
+                  <label class="col-form-label col-md-3">
+                    Real Time Alerts
+                  </label>
+                  <select [(ngModel)]="existingAlert.value.realTimeAlerts" class="custom-select col-md-3" [disabled]="existingAlert.key != editableAlertId">
+                    <option selected> </option>
+                    <option>7 minutes</option>
+                    <option>20 minutes</option>
+                    <option>30 minutes</option>
+                    <option>60 minutes</option>
+                    <option>24 hours</option>
+                    <option>7 days</option>
+                    <option>14 days</option>
+                    <option>30 days</option>
+                  </select>
+                  <div class="col-md-6">
+                    <label for="report-format-check" class="col-form-label">
+                      Format of Reports
+                    </label>
+                    <form role="form">
+                      <div class="form-group" id="report-format-check">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" class="check" name="email" [checked]="existingAlert.value.formatEmail" (change)="existingAlert.value.formatEmail = !existingAlert.value.formatEmail" [disabled]="existingAlert.key != editableAlertId"> Email
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" class="check" name="formatDoc" [checked]="existingAlert.value.formatDoc" (change)="existingAlert.value.formatDoc = !existingAlert.value.formatDoc" [disabled]="existingAlert.key != editableAlertId"> Doc
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" class="check" name="excel" [checked]="existingAlert.value.formatExcel" (change)="existingAlert.value.formatExcel = !existingAlert.value.formatExcel" [disabled]="existingAlert.key != editableAlertId"> Excel
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" class="check" name="formatPDF" [checked]="existingAlert.value.formatPDF" (change)="existingAlert.value.formatPDF = !existingAlert.value.formatPDF" [disabled]="existingAlert.key != editableAlertId"> PDF
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" class="check" name="formatHTML" [checked]="existingAlert.value.formatHTML" (change)="existingAlert.value.formatHTML = !existingAlert.value.formatHTML" [disabled]="existingAlert.key != editableAlertId"> HTML
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <button class="btn btn-outline-danger btn-sm edit-btn btn-margin" (click)="deleteAlert(existingAlert.key)">delete</button>
+                @if (existingAlert.key == editableAlertId) {
+                  <button class="btn btn-outline-danger btn-sm edit-btn btn-margin" (click)="cancelAlertEdit()">cancel</button>
+                }
+                @if (existingAlert.key != editableAlertId) {
+                  <button class="btn btn-outline-primary btn-sm edit-btn btn-margin" (click)="makeAlertMutable(existingAlert.key)">edit</button>
+                }
+                @if (existingAlert.key == editableAlertId) {
+                  <button class="btn btn-outline-primary btn-sm edit-btn btn-margin" (click)="editAlert()">update</button>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      @if (!isLoadingAlerts && (!existingAlerts || existingAlerts.size === 0)) {
+        <div class="no-alerts card">
+          You currently have no email alerts set up.
+        </div>
+      }
+      @if (isLoadingAlerts) {
+        <div class="no-alerts card">
+          Loading your alerts...
+        </div>
+      }
+      <div class="row">
+        <span class="col-md-12">
+          <a routerLink="/search" class="btn btn-outline-primary btn-block">back to search page</a>
+        </span>
+      </div>
+    </div>

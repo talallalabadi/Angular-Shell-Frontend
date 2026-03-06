@@ -1,0 +1,71 @@
+<div class="change-password-container">
+  <div class="container change-password-header">
+    Change Password
+  </div>
+
+  <div class="container change-password-card">
+    <div class="form-row">
+      <label for="current-password-input" class="form-label">
+        Current Password
+      </label>
+      <input type="password"
+             id="current-password-input"
+             class="form-control"
+             autocomplete="off"
+             [(ngModel)]="currentPassword">
+    </div>
+
+    <div class="form-row">
+      <label for="new-password-input" class="form-label">
+        New Password
+      </label>
+      <input type="password"
+             id="new-password-input"
+             class="form-control"
+             autocomplete="off"
+             [(ngModel)]="newPassword">
+    </div>
+
+    <div class="form-row">
+      <label for="confirm-password-input" class="form-label">
+        Confirm New Password
+      </label>
+      <input type="password"
+             id="confirm-password-input"
+             class="form-control"
+             autocomplete="off"
+             [(ngModel)]="newPasswordCopy">
+    </div>
+
+    <div class="center-checkbox">
+      <label class="login-text small">
+        <input type="checkbox" (click)="togglePasswordVisibility()" style="margin-right: 5px;">
+        Show Password
+      </label>
+    </div>
+
+    @if (newPasswordCopy != newPassword) {
+      <div class="alert alert-danger mt-2">
+        Passwords do not match.
+      </div>
+    }
+
+    @if (errorMessage.length > 0) {
+      <div class="alert alert-danger mt-2">
+        {{errorMessage}}
+      </div>
+    }
+
+    <div class="action-row">
+      <button class="btn btn-outline-primary profile-btn"
+              (click)="changePassword()">
+        Change Password
+      </button>
+
+      <a routerLink="/profile"
+         class="btn btn-outline-secondary profile-btn">
+        Cancel
+      </a>
+    </div>
+  </div>
+</div>

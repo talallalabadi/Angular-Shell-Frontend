@@ -1,0 +1,43 @@
+.outermost-container {
+  font: 13px "Lato", sans-serif;
+  min-height: 100vh;
+}
+
+.main-text-box {
+  text-align: center;
+  font: 25px "Lato", sans-serif;
+  letter-spacing: 6px;
+  padding: 30px;
+}
+
+.addMagazine-box {
+  max-width: 1500px;
+  padding: 20px;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.addMagazine-item {
+  margin-bottom: 10px;
+}
+
+.row {
+  margin: auto;
+}
+
+.center {
+  margin: auto;
+}
+
+.col-form-label {
+  font: 15px "Lato", sans-serif;
+}
+
+.right-align-label {
+  text-align: right;
+}
+
+.submit-button {
+  margin: 20px;
+  width: 70%;
+}

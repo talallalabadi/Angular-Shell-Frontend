@@ -1,0 +1,20 @@
+<div class="outermost-container">
+  <div class="container main-text-box">
+    Customize Company Name
+  </div>
+  <div class="container">
+    <div class="col-lg-4 center">
+      <input id="name-input" class="form-control" [(ngModel)]="company.name">
+    </div>
+    <a class="col-lg-4 nav-link center" routerLink="/search">
+      <button [disabled]="!checkFilled()" class="btn btn-outline-primary submit-button"(click)="changeCompanyName()">
+        Update
+      </button>
+    </a>
+    <a class="col-lg-4 nav-link center" routerLink="/search">
+      <button class="btn btn-outline-primary submit-button">
+        Back
+      </button>
+    </a>
+  </div>
+</div>

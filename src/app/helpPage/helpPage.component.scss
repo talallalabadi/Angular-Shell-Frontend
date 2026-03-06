@@ -1,0 +1,96 @@
+/*
+** Added standard to sizing
+*/
+
+.help-container {
+  margin-top: 64px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 40px;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+.help-box {
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.row-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;  /* Changed color to a neutral dark gray */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.row-directions {
+  padding: 10px;
+  font-size: 18px;
+  color: #555;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+ul li a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  text-decoration: underline;
+}
+
+
+.question {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.answer {
+  font-size: 18px;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-left: 3px solid #007BFF;
+  border-radius: 0 0 5px 5px;
+  margin-bottom: 10px;
+  display: none;
+}
+
+.answer.active {
+  display: block;
+}

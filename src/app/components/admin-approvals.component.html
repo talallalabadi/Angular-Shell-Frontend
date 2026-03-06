@@ -1,0 +1,74 @@
+<section class="approvals-page">
+  <div
+    class="presentation-banner"
+    style="background: #fef9c3; color: #854d0e; padding: 10px; text-align: center; font-weight: bold; border: 1px solid #facc15; margin-bottom: 1rem; border-radius: 4px;">
+    PRESENTATION MODE: This is a read-only view for demonstration purposes. Actual administration occurs on the private DigiClips network.
+  </div>
+
+  <header>
+    <h1>Pending User Access Approvals</h1>
+    <p>Review new registrations and approve or reject them directly from this page.</p>
+  </header>
+
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (loading) {
+    <p class="status-text">Loading pending user requests...</p>
+  }
+
+  @if (!loading && !errorMessage && pendingUsers.length === 0) {
+    <p class="status-text">
+      <em>There are currently no pending user requests.</em>
+    </p>
+  }
+
+  @if (!loading && !errorMessage && pendingUsers.length > 0) {
+    <div class="table-wrapper">
+      <table class="pending-table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of pendingUsers; track user) {
+            <tr>
+              <td>{{ user.firstName }}</td>
+              <td>{{ user.lastName }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                {{ user.isVerified === 0 || user.isVerified == null ? 'Pending' : user.isVerified }}
+              </td>
+              <td class="actions">
+                <button
+                  class="btn btn-success"
+                  type="button"
+                  (click)="approveUser(user)"
+                  [disabled]="isProcessing(user.email)">
+                  {{ isProcessing(user.email) ? 'Approving...' : 'Approve' }}
+                </button>
+                <button
+                  class="btn btn-outline-danger"
+                  type="button"
+                  (click)="rejectUser(user)"
+                  [disabled]="isProcessing(user.email)">
+                  {{ isProcessing(user.email) ? 'Working...' : 'Reject' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+

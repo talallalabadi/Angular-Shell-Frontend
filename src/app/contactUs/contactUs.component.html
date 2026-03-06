@@ -1,0 +1,16 @@
+<div class="form-container">
+  <div class="title-box">
+    Contact Us Form
+  </div>
+  <div class="container form-box">
+    <input id="email-input" autocomplete="nope" type="email" class="form-control form-item" placeholder="Email"  [(ngModel)]="email"  (keyup.enter)="submitForm()" autofocus>
+    <textarea id="info-input" autocomplete="nope"  type="text" class="form-control form-item" placeholder="Suggestion" cols="30" rows="5"  [(ngModel)]="info"  (keyup.enter)="submitForm()" autofocus></textarea>
+
+    @if (errorMessage.length > 0) {
+      <div class="alert alert-danger">
+        {{errorMessage}}
+      </div>
+    }
+    <button type=button class="btn btn-outline-primary btn-block login-btn" (click)="submitForm()">Submit</button>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+/* Match the height and spacing of the Change Password page */
+.view-profile-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 40px;
+}
+
+/* Header matches .main-text-box from Change Password */
+.view-profile-header {
+  text-align: center;
+  font: 25px "Lato", sans-serif;
+  letter-spacing: 6px;
+  margin-bottom: 20px;
+}
+
+/* Card-style container matching edit-profile-box */
+.view-profile-box {
+  max-width: 600px;
+  padding: 20px;
+}
+
+/* Add a clean card look */
+.profile-card {
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 25px 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Rows for each profile field */
+.profile-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e5e5;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Label styling */
+.profile-info-label {
+  font-weight: 600;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+/* Value styling */
+.profile-info-value {
+  color: #222;
+}
+
+/* Button row */
+.profile-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Match Change Password button spacing */
+.profile-btn {
+  letter-spacing: 5px;
+  padding: 10px 25px;
+  font-size: 14px;
+}
+
+/* Subtle hover effect */
+.profile-btn:hover {
+  transform: translateY(-1px);
+  transition: 0.15s ease;
+}

@@ -1,0 +1,48 @@
+<div class="alerts-container container">
+  <div class="section-title">
+    Create an Email Alert
+  </div>
+  <div class="alert-box container">
+    <div class="row">
+      <label class="col-form-label right-align-label col-md-3">
+        Keyword and Subject Search
+      </label>
+      <input type="text" autocomplete="nope" class="form-control alert-item col-md-3" [(ngModel)]="alert.keywords_string"
+             placeholder="keywords, separated by commas">
+      <label class="col-form-label right-align-label col-md-3">
+        Email
+      </label>
+      <input type="text" autocomplete="nope" class="form-control alert-item col-md-3" [(ngModel)]="alert.email">
+    </div>
+    <div class="row">
+      <label class="col-form-label right-align-label col-md-3">
+        Media
+      </label>
+      <select class="custom-select col-md-3 alert-item" [(ngModel)]="alert.media">
+        <option selected>All</option>
+        <option>Magazine</option>
+        <option>Newspaper</option>
+        <option>Television</option>
+        <option>Radio</option>
+      </select>
+      <label class="col-form-label right-align-label col-md-3">
+        Real Time Alert Duration
+      </label>
+      <select class="custom-select col-md-3 alert-item" [(ngModel)]="alert.frequency" >
+        <option selected> </option>
+        <option>7 minutes</option>
+        <option>20 minutes</option>
+        <option>30 minutes</option>
+        <option>60 minutes</option>
+        <option>24 hours</option>
+        <option>7 days</option>
+        <option>14 days</option>
+        <option>30 days</option>
+      </select>
+    </div>
+    <div id="create-button">
+      <button class="create-button btn btn-outline-primary" [disabled]="!checkFilled()"
+              (click)="addEmailAlert()">Create an Alert</button>
+    </div>
+  </div>
+</div>

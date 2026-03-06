@@ -1,0 +1,7 @@
+Quick auth guard breakdown (used in app-routing):
+
+authGuard: it will redirect to the login screen if the user is NOT logged in. This is meant to be used on routes that
+should only be accessible to logged in users. If the user attempts to access a non logged in page, redirects to search.
+
+logged in guard: it will redirect to the search screen if the user is logged in. This is meant to be used on routes that
+should only be accessible to non logged in users. Returns True if it does not find a cooke with the session information

@@ -1,0 +1,33 @@
+<div class="help-container container">
+  <div class="section-title">FAQs</div>
+  <section class="questions">
+    @for (faq of faqs; track faq; let i = $index) {
+      <div class="faq-item">
+        <div class="question" (click)="toggleAnswer(i)">
+          {{ faq.question }}
+          @if (!faq.active) {
+            <span>+</span>
+          }
+          @if (faq.active) {
+            <span>-</span>
+          }
+        </div>
+        <div class="answer" [ngClass]="{ 'active': faq.active }">
+          {{ faq.answer }}
+        </div>
+      </div>
+    }
+  </section>
+
+  <div class="section-title">Contact Us</div>
+  <div class="help-box">
+    <a href="http://localhost:4200/contactUs" class = "my-button" target="_blank">Go to contact page</a> <!--Add a link to contact page of sorts-->
+    <ul>
+      @for (contact of contacts; track contact) {
+        <li>
+          <b>{{ contact.name }}</b> - <a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

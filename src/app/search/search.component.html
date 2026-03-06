@@ -1,0 +1,1854 @@
+<!-- RADIO DETAIL'S PAGE -->
+@if (showradio && (mediaType === 'Radio' || mediaType === 'All')) {
+<div class="outermost-container">
+  <div class="container details-content-container">
+    <div class="row">
+      <div class="details-content-container col-md-6">
+        <audio class="placeholder-image" controls crossorigin="anonymous">
+          <source [src]="radioSource" type="audio/wav" />
+        </audio>
+        <!-- <img class="placeholder-image" src="https://i.ytimg.com/vi/NpEaa2P7qZI/maxresdefault.jpg" alt="Video Placeholder Image" /> -->
+      </div>
+      <div class="details-content-container col-md-6">
+        <h4>{{ featuredDetails?.Title }}</h4>
+        <div class="results-line">
+          <span class="results-label">Station Name:</span> {{ featuredDetails?.SName }}
+        </div>
+        <div class="results-line">
+          <span class="results-label">Time Stamp:</span> {{ featuredDetails?.TStamp }}
+        </div>
+        <button type="button" class="btn btn-outline-primary" (click)="backToResults()">Back to Results</button>
+        <button type="button" class="btn btn-outline-primary" (click)="createRadioSegments()">View Segments</button>
+      </div>
+    </div>
+    <!-- End class="row" -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="results-line">
+          <span class="results-label">Content:</span> {{ featuredDetails?.TEXTS }}
+        </div>
+        <div class="caption-box">
+          <div class="button-box">
+            <button type="button" class="caption-button">Download</button>
+          </div>
+          <div class="caption-text-box">
+            @for (s of radioSegments; track s; let i = $index) {
+            <div>
+              <img class="clip" (click)="goToRadioSegment(s)" src="../../assets/images/placeholder.jpg"
+                alt="Segment preview" style="margin: 0 20px 20px 0;" />
+              <p>
+                <b>(start at {{ s }} seconds)</b>
+                “Fourscore and seven years ago our fathers brought forth, on this continent, a new nation, conceived in
+                liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great
+                civil war, testing whether that nation, or any nation so conceived, and so dedicated, can long endure.
+                We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a
+                final resting-place for those who here gave their lives, that that nation might live. It is altogether
+                fitting and proper that we should do this.”
+              </p>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p [innerHTML]="featuredDetails?.Result_Line"></p>
+      </div>
+    </div>
+  </div>
+  <!-- End class="container details-content-container" -->
+</div>
+}
+
+@if (!showDetails) {
+<div class="outermost-container">
+  @if (!showResults) {
+  <div class="container welcome-box">
+    <h3>DigiClips</h3>
+    <h5>your personal media search engine</h5>
+  </div>
+  }
+  <div class="container basic-search">
+    <div class="search-bar">
+      <input type="text" autocomplete="my-field-name5" class="form-control search-item" id="search-bar"
+        [(ngModel)]="searchForm.keywords_string" (keyup.enter)="search()" placeholder="Search DigiClips" autofocus />
+      <i (click)="search()" class="fa fa-search"></i>
+    </div>
+    <!-- Guest Search Counter -->
+    @if (authService.isGuestUser()) {
+    <div class="guest-search-counter">
+      <p>Searches remaining: {{ authService.getGuestSearchesLeft() }} of 5</p>
+      <button type="button" class="btn btn-primary register-btn" (click)="redirectToRegister()">
+        Register for unlimited access
+      </button>
+    </div>
+    }
+    @if (showResults) {
+    <button (click)="newSearch()" type="button" class="btn">New search</button>
+    <button (click)="emailResults()" type="button" class="btn">Send email</button>
+    <div class="btn-group download-results">
+      <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        Download
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item" (click)="generatePDF()">PDF</li>
+        <li class="dropdown-item" (click)="downloadDocx()">DOCX</li>
+        <li class="dropdown-item" (click)="downloadHtml()">HTML</li>
+        <li class="dropdown-item" (click)="downloadXlsx()">XLSX</li>
+        <li class="dropdown-divider" role="separator"></li>
+        <li class="dropdown-item" (click)="downloadAll()">All formats (.zip folder)</li>
+      </ul>
+    </div>
+    }
+  </div>
+  <!-- End class="container basic-search" -->
+  @if (advanced) {
+  <div class="container advanced-search">
+    @if (!showResults) {
+    <div class="container search-box">
+      <!-- ... your commented advanced search markup unchanged ... -->
+    </div>
+    }
+    <!-- class="container search-box" -->
+    <!-- MEDIA TYPE -->
+    <div class="container search-box">
+      <h6>Media Source</h6>
+      <hr class="custom-hr1" />
+      <!--
+              TODO:
+              Add Styles to <form> element for Media Types
+              DO NOT MODIFY: [(ngModel)]
+              -->
+      <div class="row select-group media-select">
+        <label for="mediaTypeDropdown" class="col-form-label right-align-label col-md-3">
+          Media Type
+        </label>
+        <div class="dropdown col-md-9">
+          <button class="custom-select button-label" type="button" id="mediaTypeDropdown" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Select Media Types
+          </button>
+          <div class="dropdown-menu" aria-labelledby="mediaTypeDropdown">
+            <form (ngSubmit)="$event.preventDefault()">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="media-magazine" name="mediaType_magazine"
+                  value="Magazine" [(ngModel)]="mediaTypeHash.magazine" />
+                <label class="form-check-label" for="media-magazine">Magazine</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="media-newspaper" name="mediaType_newspaper"
+                  value="Newspaper" [(ngModel)]="mediaTypeHash.newspaper" />
+                <label class="form-check-label" for="media-newspaper">Newspaper</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="media-television" name="mediaType_television"
+                  value="Television" [(ngModel)]="mediaTypeHash.television" />
+                <label class="form-check-label" for="media-television">Television</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="media-social-media" name="mediaType_socialMedia"
+                  value="Social Media" [(ngModel)]="mediaTypeHash.socialMedia" />
+                <label class="form-check-label" for="media-social-media">Social Media</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="media-radio" name="mediaType_radio" value="Radio"
+                  [(ngModel)]="mediaTypeHash.radio" />
+                <label class="form-check-label" for="media-radio">Radio</label>
+              </div>
+            </form>
+            <!-- End form check boxes -->
+          </div>
+          <!-- End class="dropdown-menu" -->
+        </div>
+        <!-- End class="dropdown" -->
+      </div>
+      <!-- End class="row select-group" -->
+      <div class="row select-group">
+        <label for="denver-tv-select" class="col-form-label right-align-label col-md-3">
+          TV Station
+        </label>
+        <select [(ngModel)]="searchForm.denverTelevision" name="denver-tv" class="custom-select col-md-3"
+          id="denver-tv-select">
+          <option selected>All</option>
+          <option>Antenna</option>
+          <option>GRIT</option>
+          <option>KCDO</option>
+          <option>KCEC-DT</option>
+          <option>KCNC-TV</option>
+          <option>KDEN-DT</option>
+          <option>KDVR-DT</option>
+          <option>KMGH-TV</option>
+          <option>KSBS</option>
+          <option>KTVD-DT</option>
+          <option>KUSA-HD</option>
+          <option>KUSA HD</option>
+          <option>KWGN-DT</option>
+        </select>
+        <label for="newspaper-select" class="col-form-label right-align-label col-md-3">
+          Newspaper
+        </label>
+        <select name="newspaper" class="custom-select col-md-3" id="newspaper-select"
+          [(ngModel)]="searchForm.newspaperSelection">
+          <option selected>All</option>
+          @for (paper of newspapers; track paper) {
+          <option>{{ paper.NewspaperName }}</option>
+          }
+        </select>
+      </div>
+      <!-- End class="row select-group" -->
+      <div class="row select-group">
+        <label for="radio-select" class="col-form-label right-align-label col-md-3">
+          Radio Station
+        </label>
+        <select name="radio" class="custom-select col-md-3" id="radio-select" [(ngModel)]="searchForm.radioSelection">
+          <option selected>All</option>
+          @for (radio of radios; track radio) {
+          <option>{{ radio.StationName }}</option>
+          }
+        </select>
+        <label for="magazine-select" class="col-form-label right-align-label col-md-3">
+          Magazine
+        </label>
+        <select name="magazine" class="custom-select col-md-3" id="magazine-select"
+          [(ngModel)]="searchForm.magazineSelection">
+          <option selected>All</option>
+          @for (mag of magazines; track mag) {
+          <option>{{ mag.MagazineName }}</option>
+          }
+        </select>
+      </div>
+      <div class="row select-group">
+        <label for="social-media-select" class="col-form-label right-align-label col-md-3">
+          Social Media
+        </label>
+        <select name="social-media" class="custom-select col-md-3" id="social-media-select"
+          [(ngModel)]="searchForm.socialMediaSelection">
+          <option selected>All</option>
+          <option>Youtube</option>
+          <option>Twitter</option>
+          <!-- <option>facebook</option>
+                            <option>linkedin</option> -->
+        </select>
+      </div>
+      <br />
+      <h6>Geographical Location</h6>
+      <hr class="custom-hr1" />
+      <div class="row select-group">
+        <label for="country-select" class="col-form-label right-align-label col-md-3">
+          Country
+        </label>
+        <select name="country" class="custom-select col-md-9" id="country-select" [(ngModel)]="searchForm.country"
+          (change)="updateLocationalDropdowns('country'); updateRadioDropdown(); updateNewspaperDropdown(); updateMagazineDropdown()">
+          <option selected>All</option>
+          @for (country of countries; track country) {
+          <option>{{ country.Country }}</option>
+          }
+        </select>
+      </div>
+      <div class="row select-group">
+        <label for="stateProv-select" class="col-form-label right-align-label col-md-3">
+          State/Province
+        </label>
+        <select name="state" class="custom-select col-md-3" id="stateProv-select" [(ngModel)]="searchForm.stateProv"
+          (change)="updateLocationalDropdowns('state'); updateRadioDropdown(); updateNewspaperDropdown(); updateMagazineDropdown()">
+          <option selected>All</option>
+          @for (state of states; track state) {
+          <option>{{ state.StateProvince }}</option>
+          }
+        </select>
+        <label for="city-select" class="col-form-label right-align-label col-md-3">
+          City
+        </label>
+        <select name="city" class="custom-select col-md-3" id="city-select" [(ngModel)]="searchForm.city"
+          (change)="updateLocationalDropdowns('city'); updateRadioDropdown(); updateNewspaperDropdown(); updateMagazineDropdown()">
+          <option selected>All</option>
+          @for (city of cities; track city) {
+          <option>{{ city.City }}</option>
+          }
+        </select>
+      </div>
+      <br />
+      <h6>Date and Time</h6>
+      <hr class="custom-hr1" />
+      <div class="row select-group">
+        <label for="start-date-input" class="col-form-label right-align-label col-md-3">
+          Start Date
+        </label>
+        <input name="startDate" class="custom-select col-md-3" type="date" placeholder="e.g. 01/01/2018"
+          id="start-date-input" [(ngModel)]="searchForm.startDate" />
+        <label for="start-time-input" class="col-form-label right-align-label col-md-3">
+          Start Time
+        </label>
+        <input name="startTime" class="custom-select form-control col-md-3" type="time" value="00:00"
+          id="start-time-input" [(ngModel)]="searchForm.startTime" />
+      </div>
+      <div class="row select-group">
+        <label for="end-date-input" class="col-form-label right-align-label col-md-3">
+          End Date
+        </label>
+        <input name="endDate" class="custom-select form-control col-md-3" type="date" placeholder="e.g. 02/22/2018"
+          id="end-date-input" [(ngModel)]="searchForm.endDate" />
+        <label for="end-time-input" class="col-form-label right-align-label col-md-3">
+          End Time
+        </label>
+        <input name="endTime" class="custom-select form-control col-md-3" type="time" value="23:59" id="end-time-input"
+          [(ngModel)]="searchForm.endTime" />
+      </div>
+      <br />
+      <h6>Display Results</h6>
+      <hr class="custom-hr1" />
+      <div class="select-group row">
+        <label for="results-num-select" class="col-form-label right-align-label col-md-4">
+          Number of Results to Display (10-500)
+        </label>
+        <input type="number" min="10" max="500" id="results-num-select"
+          class="form-control search-item col-md-8 custom-select test" placeholder="limit: 500"
+          [(ngModel)]="searchForm.numOfResults" (keyup.enter)="search()" />
+      </div>
+      <br />
+      <h6>Translation</h6>
+      <hr class="custom-hr1" />
+      <div class="row select-group">
+        <label class="col-form-label right-align-label col-md-3">
+          Language of Results
+        </label>
+        <div class="col-md-9">
+          <app-languageTranslation 
+              [selectedLanguage]="selectedLanguage"
+              (languageSelected)="onLanguageChanged($event)">
+          </app-languageTranslation>
+        </div>
+      </div>
+      <br />
+      <div class="row d-flex justify-content-center">
+        <button id="search-btn" type="button" (click)="search()" class="btn btn-outline-primary col-md-8">
+          Search
+        </button>
+        <span class="col-md-8 text-center">
+          Or set up an email alert below, based on the current search configuration.
+        </span>
+      </div>
+      <!-- Email Alert Configuration Button -->
+      <div class="row d-flex justify-content-center">
+        <button class="btn btn-outline-primary col-md-8" type="button" data-toggle="collapse"
+          data-target="#emailAlertConfig" aria-expanded="false" aria-controls="emailAlertConfig">
+          Email Alert Configuration
+        </button>
+      </div>
+      <br />
+      <!-- Collapsible Email Alert Configuration Section -->
+      <div class="collapse" id="emailAlertConfig">
+        <div class="select-group row">
+          <label for="emails-input" class="col-form-label right-align-label col-md-3">
+            Recipient Email Addresses
+          </label>
+          <input type="text" autocomplete="my-field-name1" class="custom-select search-item col-md-9"
+            placeholder="comma-separated" [(ngModel)]="searchForm.emails" id="emails-input" name="emails"
+            (keyup.enter)="sendEmail()" />
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col-form-label right-align-label">
+                  Format of Reports
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" role="group" aria-label="Format of Reports">
+                  <div class="checkbox">
+                    <input type="checkbox" class="check" id="format-email" name="formatEmail"
+                      [(ngModel)]="searchForm.formatEmail" />
+                    <label for="format-email">Email</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" class="check" id="format-doc" name="formatDoc"
+                      [(ngModel)]="searchForm.formatDoc" />
+                    <label for="format-doc">Doc</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" class="check" id="format-excel" name="formatExcel"
+                      [(ngModel)]="searchForm.formatExcel" />
+                    <label for="format-excel">Excel</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" class="check" id="format-pdf" name="formatPDF"
+                      [(ngModel)]="searchForm.formatPDF" />
+                    <label for="format-pdf">PDF</label>
+                  </div>
+                  <div class="checkbox">
+                    <input type="checkbox" class="check" id="format-html" name="formatHTML"
+                      [(ngModel)]="searchForm.formatHTML" />
+                    <label for="format-html">HTML</label>
+                  </div>
+                </div>
+                <!-- End form-group -->
+              </div>
+            </div>
+            <!-- End class="row" -->
+          </div>
+          <!-- End class="col-md-6" -->
+          <div class="col-md-6">
+            <div class="select-group row">
+              <label for="results-num-select-email" class="col-form-label right-align-label col-md-6">
+                Number of results
+              </label>
+              <input type="number" min="10" max="500" id="results-num-select-email" name="numOfResultsEmail"
+                class="form-control search-item col-md-6" placeholder="limit: 500" [(ngModel)]="searchForm.numOfResults"
+                (keyup.enter)="search()" />
+            </div>
+            <div class="select-group row">
+              <label for="real-time-alerts-select" class="col-form-label right-align-label col-md-6">
+                Frequency
+              </label>
+              <select name="real-time-alerts" [(ngModel)]="searchForm.realTimeAlerts" class="custom-select col-md-6"
+                id="real-time-alerts-select" required>
+                <option [value]="0" selected></option>
+                <option [value]="7">7 minutes</option>
+                <option [value]="20">20 minutes</option>
+                <option [value]="30">30 minutes</option>
+                <option [value]="60">60 minutes</option>
+                <option [value]="24 * 60">24 hours</option>
+                <option [value]="7 * 24 * 60">7 days</option>
+                <option [value]="14 * 24 * 60">14 days</option>
+                <option [value]="30 * 24 * 60">30 days</option>
+              </select>
+            </div>
+          </div>
+          <!-- End class="col-md-6" -->
+        </div>
+        <!-- End class="row" -->
+        <div class="row d-flex justify-content-center">
+          <button id="submit-alerts-setup-btn" type="button" (click)="submitAlertSetup()"
+            class="btn btn-outline-primary col-md-8">
+            Submit Email Alert Configuration
+          </button>
+        </div>
+      </div>
+      <!-- End collapse -->
+    </div>
+  </div>
+  }
+</div>
+}
+<!-- class="container advanced-search" *ngIf="advanced" -->
+
+<!-- SEARCH RESULTS -->
+@if (showResults) {
+<div>
+  <!-- Update banner ad at the top of search results -->
+  @if (showBannerAd) {
+  <div class="container">
+    <app-ad-unit [adSlot]="adService.adSlots.banner" [adFormat]="adService.getAdFormat('banner')"
+      [width]="adService.getResponsiveAdSize('banner').width" [height]="adService.getResponsiveAdSize('banner').height"
+      adClass="banner-ad">
+    </app-ad-unit>
+  </div>
+  }
+  <div class="container results-header">
+    @if (showSpinner) {
+    <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+    </div>
+    }
+    <!-- Quick Navigation Buttons to jump to result sections -->
+    @if (resultsReady && totalResults > 0) {
+    <div class="container result-nav" #resultNav [ngClass]="{ fixed: isNavFixed }">
+      <div class="btn-group" role="group" aria-label="Result section navigation">
+        @if (npResults > 0) {
+        <button class="btn btn-outline-primary" [ngClass]="{ active: activeSection === 'newspaperResults' }"
+          [attr.aria-pressed]="activeSection === 'newspaperResults'" (click)="scrollTo('newspaperResults')"
+          type="button">
+          Newspaper
+        </button>
+        }
+        @if (mgResults > 0) {
+        <button class="btn btn-outline-primary" [ngClass]="{ active: activeSection === 'magazineResults' }"
+          [attr.aria-pressed]="activeSection === 'magazineResults'" (click)="scrollTo('magazineResults')" type="button">
+          Magazine
+        </button>
+        }
+        @if (rdResults > 0) {
+        <button class="btn btn-outline-primary" [ngClass]="{ active: activeSection === 'radioResults' }"
+          [attr.aria-pressed]="activeSection === 'radioResults'" (click)="scrollTo('radioResults')" type="button">
+          Radio
+        </button>
+        }
+        @if (tvResults > 0) {
+        <button class="btn btn-outline-primary" [ngClass]="{ active: activeSection === 'tvResults' }"
+          [attr.aria-pressed]="activeSection === 'tvResults'" (click)="scrollTo('tvResults')" type="button">
+          Television
+        </button>
+        }
+      </div>
+    </div>
+    }
+    <!-- commented dropdown block stays commented -->
+  </div>
+  <!--Button for downloading selected sources-->
+  <button id="floatingDownload" class="btn btn-outline-primary" type="button" (click)="downloadSelectedSources()">
+    {{ getDownloadButtonLabel() }}
+  </button>
+  <!--Button for Bookmarking selected sources-->
+  <button id="floatingBookmark" class="btn btn-outline-primary" type="button" (click)="bookmarkSelectedSources()">
+    {{ getBookmarkButtonLabel() }}
+  </button>
+  @if (!showSpinner && resultsReady && totalResults == 0) {
+  <div class="alert alert-secondary" role="alert">
+    No results found.
+  </div>
+  }
+  @if (error !== null) {
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  }
+</div>
+}
+<!-- End class="container results-header" -->
+
+<div class="exportthis">
+  <!-- Add a sidebar ad container that floats next to results -->
+  <div class="results-container" [ngClass]="{ 'no-ads': !showSidebarAd }">
+    <div class="results-content">
+      <!--Newspaper Results Start-->
+      @if (showResults) {
+      <div>
+        @if (!showSpinner && newspaperResults.length > 0) {
+        <div id="newspaperResults" class="container result-box">
+          <h3>
+            <span>Newspaper Results (found: {{ npResults }} limit: {{ limit }})</span>
+            @if (npResultsExtra) {
+            <span>[More than {{ limit }} results available]</span>
+            }
+            <div class="Padding-btn">
+              <span>
+                <button id="newsCheckAll" class="btn btn-outline-primary btn-sm float-right" type="button"
+                  (click)="toggleAllNewsResults()" data-html2canvas-ignore>
+                  Select All
+                </button>
+              </span>
+              <span>
+                @if (isCollapsedPaper == true && !showSpinner && npResults != 0) {
+                <button type="button" (click)="isCollapsedPaper = !isCollapsedPaper"
+                  class="btn btn-primary btn-sm float-right">
+                  Show
+                </button>
+                }
+              </span>
+              <span>
+                @if (isCollapsedPaper == false && !showSpinner && npResults != 0) {
+                <button type="button" (click)="isCollapsedPaper = !isCollapsedPaper"
+                  class="btn btn-primary btn-sm float-right">
+                  Hide
+                </button>
+                }
+              </span>
+            </div>
+          </h3>
+          <hr />
+          @if (npResultsExtra) {
+          <div class="alert alert-warning" role="alert">
+            More than {{ limit }} results available.
+          </div>
+          }
+        </div>
+        }
+        <!-- End class="container result-box" -->
+        @if (!showSpinner) {
+        <div [collapse]="isCollapsedPaper" class="container result-box">
+          <div class="container result-box">
+            @for (group of newspaperResults; track group) {
+            <div class="container result-box">
+              <!-- CHANGED: li -> div to keep HTML valid -->
+              <div class="result-item" style="list-style-type: none;">
+                <input class="checkBox" type="checkbox" name="newsResult"
+                  (change)="toggleSelection({ id: group.ID, name: group.Title }, $event)" data-html2canvas-ignore />
+                <div class="li-text" [attr.id]="group.ID">
+                  <div class="results-line-title">
+                    <a [href]="group.Link" target="_blank" rel="noopener" [innerHTML]="group.Title"></a>
+                  </div>
+                  <div class="results-line-body">
+                    <div class="results-line-subtitle">
+                      <a [href]="group.NewspaperLink" target="_blank" rel="noopener">{{ group.Newspaper }}</a>
+                      @if (group.Author) {
+                      <span class="results-line-author">
+                        - {{ group.Author | lowercase }}
+                      </span>
+                      }
+                      @if (group.PublishDate) {
+                      <span class="results-line-publish-date">
+                        - {{ group.PublishDate | date : 'MMMM d, y h:mm a' }}
+                      </span>
+                      }
+                    </div>
+                    <p [innerHTML]="group.Summary"></p>
+                  </div>
+                </div>
+                <!-- Comment + Translate Buttons -->
+                      <div class="result-actions">
+                      <div class="comment-toggle-container">
+                        <button class="btn btn-sm btn-outline-info comment-toggle-btn" 
+                          (click)="toggleComments('newspaper-' + group.ID)">
+                    <i class="fa"
+                      [ngClass]="isCommentsExpanded('newspaper-' + group.ID) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                    Comments ({{ getComments('newspaper-' + group.ID).length }})
+                    </button>
+                  </div>
+
+                  <button class="btn btn-sm btn-outline-secondary translate-btn"
+                          (click)="openTranslatePopup('newspaper', group)">
+                    <i class="fa fa-language"></i> Translate
+                  </button>
+                </div>
+
+                <!-- Comment Section -->
+                @if (isCommentsExpanded('newspaper-' + group.ID)) {
+                <div class="comment-section">
+                  <!-- Add Comment Form -->
+                  <div class="add-comment-form">
+                    <textarea #newComment class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+                    <button class="btn btn-primary btn-sm mt-2" type="button"
+                      (click)="addComment('newspaper-' + group.ID, newComment.value); newComment.value = ''">
+                      Post Comment
+                    </button>
+                  </div>
+                  <!-- Comments List -->
+                  @if (getComments('newspaper-' + group.ID).length > 0) {
+                  <div class="comments-list">
+                    <div class="search-comment">
+                      <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                      <button class="btn btn-sm btn-link" type="button"
+                        (click)="searchComments(keyw.value, 'newspaper-' + group.ID)">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                    @for (comment of getComments('newspaper-' + group.ID); track comment) {
+                    <div class="comment-item">
+                      <div class="comment-header">
+                        <strong>{{ comment.username }}</strong>
+                        <span class="comment-timestamp">{{ comment.timestamp | date : 'short' }}</span>
+                      </div>
+                      <div class="comment-text" [innerHTML]="comment.text"></div>
+                      <div class="comment-actions">
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="likeComment('newspaper-' + group.ID, comment.id)">
+                          <i class="fa fa-thumbs-up"></i> Like ({{ comment.likes }})
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="dislikeComment('newspaper-' + group.ID, comment.id)">
+                          <i class="fa fa-thumbs-down"></i> Dislike ({{ comment.dislikes }})
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showReplyForm = !comment.showReplyForm">
+                          <i class="fa fa-reply"></i> Reply
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showEditForm = !comment.showEditForm">
+                          <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showDelForm = !comment.showDelForm">
+                          <i class="fas fa-trash"></i> Delete
+                        </button>
+                      </div>
+                      <!-- Reply Form -->
+                      @if (comment.showReplyForm) {
+                      <div class="reply-form">
+                        <textarea #replyText class="form-control" rows="1" placeholder="Write a reply..."></textarea>
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="addReply('newspaper-' + group.ID, comment.id, replyText.value); replyText.value = ''; comment.showReplyForm = false">
+                          Post Reply
+                        </button>
+                      </div>
+                      }
+                      <!-- Edit form -->
+                      @if (comment.showEditForm) {
+                      <div class="edit-form">
+                        <textarea #editText class="form-control" rows="1">{{ comment.text }}</textarea>
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="editComment(editText.value, 'newspaper-' + group.ID, comment.id); editText.value = ''; comment.showEditForm = false">
+                          Confirm
+                        </button>
+                      </div>
+                      }
+                      <!-- Delete form -->
+                      @if (comment.showDelForm) {
+                      <div class="edit-form">
+                        Would you like to delete this Comment?
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="deleteComment('newspaper-' + group.ID, comment.id); comment.showDelForm = false">
+                          Confirm
+                        </button>
+                        <button class="btn btn-primary btn-sm mt-1" type="button" (click)="comment.showDelForm = false">
+                          Cancel
+                        </button>
+                      </div>
+                      }
+                      <!-- Replies List -->
+                      @if (comment.replies && comment.replies.length > 0) {
+                      <div class="replies-list">
+                        <div class="search-Replies">
+                          <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="searchReplies(keyw.value, comment.id, 'newspaper-' + group.ID)">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                        @for (reply of comment.replies; track reply) {
+                        <div class="reply-item">
+                          <div class="reply-header">
+                            <strong>{{ reply.username }}</strong>
+                            <span class="reply-timestamp">{{ reply.timestamp | date:'short' }}</span>
+                          </div>
+                          <div class="reply-text" [innerHTML]="reply.text"></div>
+                        </div>
+                        }
+                      </div>
+                      }
+                    </div>
+                    }
+                  </div>
+                  }
+                  <!-- No Comments Message -->
+                  @if (getComments('newspaper-' + group.ID).length === 0) {
+                  <div class="no-comments">
+                    <p>No comments yet. Be the first to comment!</p>
+                  </div>
+                  }
+                </div>
+                }
+              </div>
+              <!-- End class="container result-box" -->
+            </div>
+            }
+            <!-- End class="container result-box" -->
+          </div>
+          <!-- End *ngIf="!showSpinner" -->
+        </div>
+        }
+        <!-- End *ngIf="mediaType == 'Newspaper' || mediaType -->
+
+        <!-- Update ad between newspaper and magazine results (in-feed format) -->
+        @if (showBannerAd && !showSpinner && newspaperResults.length > 0 && magazineResults.length > 0) {
+        <div class="container">
+          <app-ad-unit [adSlot]="adService.adSlots.betweenResults" [adFormat]="adService.getAdFormat('betweenResults')"
+            [layoutKey]="adService.getLayoutKey('betweenResults')" adClass="results-ad">
+          </app-ad-unit>
+        </div>
+        }
+        <!--Magazine Results Start-->
+        @if (showResults) {
+        <div>
+          @if (!showSpinner && magazineResults.length > 0) {
+          <div id="magazineResults" class="container result-box">
+            <h3>
+              <span>Magazine Results (found: {{ mgResults }} limit: {{ limit }})</span>
+              @if (mgResultsExtra) {
+              <span>[More than {{ limit }} results available]</span>
+              }
+              <span>
+                <button id="magCheckAll" class="btn btn-outline-primary btn-sm float-right" type="button"
+                  (click)="toggleAllMagazineResults()">
+                  Select All
+                </button>
+              </span>
+              <span>
+                @if (isCollapsedMag == true && !showSpinner && mgResults != 0) {
+                <button type="button" (click)="isCollapsedMag = !isCollapsedMag"
+                  class="btn btn-primary btn-sm float-right">
+                  Show
+                </button>
+                }
+              </span>
+              <span>
+                @if (isCollapsedMag == false && !showSpinner && mgResults != 0) {
+                <button type="button" (click)="isCollapsedMag = !isCollapsedMag"
+                  class="btn btn-primary btn-sm float-right">
+                  Hide
+                </button>
+                }
+              </span>
+            </h3>
+            <hr />
+            @if (mgResultsExtra) {
+            <div class="alert alert-warning" role="alert">
+              More than {{ limit }} results available.
+            </div>
+            }
+          </div>
+          }
+          <!-- End class="container result-box" -->
+          @if (!showSpinner) {
+          <div [collapse]="isCollapsedMag" class="container result-box">
+            @for (group of magazineResults; track group) {
+            <div class="container result-box">
+              <!-- CHANGED: li -> div to keep HTML valid -->
+              <div class="result-item">
+                <input class="checkBox" type="checkbox" name="magResult"
+                  (click)="magazineIds = updateSectionIds(group.ID, 'magazine')" />
+                <div class="li-text">
+                  <div class="results-line-title">
+                    <a [href]="group.Link" target="_blank" rel="noopener" [innerHTML]="group.Title"></a>
+                  </div>
+                  <div class="results-line-body">
+                    <div class="results-line-subtitle">
+                      <a [href]="group.MagazineLink" target="_blank" rel="noopener">{{ group.Magazine }}</a>
+                      @if (group.Author) {
+                      <span class="results-line-author">
+                        - {{ group.Author | lowercase }}
+                      </span>
+                      }
+                      @if (group.PublishDate) {
+                      <span class="results-line-publish-date">
+                        - {{ group.PublishDate | date : 'MMMM d, y h:mm a' }}
+                      </span>
+                      }
+                    </div>
+                    <p [innerHTML]="group.Summary"></p>
+                  </div>
+                </div>
+                <!-- End class="li-text" -->
+                <!-- Comment + Translate Buttons -->
+                <div class="result-actions">
+                  <div class="comment-toggle-container">
+                    <button class="btn btn-sm btn-outline-info comment-toggle-btn" 
+                            (click)="toggleComments('magazine-' + group.ID)">
+                      <i class="fa" [ngClass]="isCommentsExpanded('magazine-' + group.ID) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                      Comments ({{ getComments('magazine-' + group.ID).length }})
+                    </button>
+                  </div>
+
+                  <button class="btn btn-sm btn-outline-secondary translate-btn"
+                          (click)="openTranslatePopup('magazine', group)">
+                    <i class="fa fa-language"></i> Translate
+                  </button>
+                </div>
+
+                <!-- Comment Section -->
+                @if (isCommentsExpanded('magazine-' + group.ID)) {
+                <div class="comment-section">
+                  <div class="add-comment-form">
+                    <textarea #newComment class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+                    <button class="btn btn-primary btn-sm mt-2" type="button"
+                      (click)="addComment('magazine-' + group.ID, newComment.value); newComment.value = ''">
+                      Post Comment
+                    </button>
+                  </div>
+                  @if (getComments('magazine-' + group.ID).length > 0) {
+                  <div class="comments-list">
+                    <div class="search-comment">
+                      <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                      <button class="btn btn-sm btn-link" type="button"
+                        (click)="searchComments(keyw.value, 'magazine-' + group.ID)">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                    @for (comment of getComments('magazine-' + group.ID); track comment) {
+                    <div class="comment-item">
+                      <div class="comment-header">
+                        <strong>{{ comment.username }}</strong>
+                        <span class="comment-timestamp">{{ comment.timestamp | date:'short' }}</span>
+                      </div>
+                      <div class="comment-text" [innerHTML]="comment.text"></div>
+                      <div class="comment-actions">
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="likeComment('magazine-' + group.ID, comment.id)">
+                          <i class="fa fa-thumbs-up"></i> Like ({{ comment.likes }})
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="dislikeComment('magazine-' + group.ID, comment.id)">
+                          <i class="fa fa-thumbs-down"></i> Dislike ({{ comment.dislikes }})
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showReplyForm = !comment.showReplyForm">
+                          <i class="fa fa-reply"></i> Reply
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showEditForm = !comment.showEditForm">
+                          <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="comment.showDelForm = !comment.showDelForm">
+                          <i class="fas fa-trash"></i> Delete
+                        </button>
+                      </div>
+                      @if (comment.showReplyForm) {
+                      <div class="reply-form">
+                        <textarea #replyText class="form-control" rows="1" placeholder="Write a reply..."></textarea>
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="addReply('magazine-' + group.ID, comment.id, replyText.value); replyText.value = ''; comment.showReplyForm = false">
+                          Post Reply
+                        </button>
+                      </div>
+                      }
+                      @if (comment.showEditForm) {
+                      <div class="edit-form">
+                        <textarea #editText class="form-control" rows="1">{{ comment.text }}</textarea>
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="comment.text = editComemnt(editText.value, 'magazine-' + group.ID, comment.id); comment.showEditForm = false">
+                          Confirm
+                        </button>
+                      </div>
+                      }
+                      @if (comment.showDelForm) {
+                      <div class="edit-form">
+                        Would you like to delete this Comment?
+                        <button class="btn btn-primary btn-sm mt-1" type="button"
+                          (click)="deleteComment('magazine-' + group.ID, comment.id); comment.showDelForm = false">
+                          Confirm
+                        </button>
+                        <button class="btn btn-primary btn-sm mt-1" type="button" (click)="comment.showDelForm = false">
+                          Cancel
+                        </button>
+                      </div>
+                      }
+                      @if (comment.replies && comment.replies.length > 0) {
+                      <div class="replies-list">
+                        <div class="search-Replies">
+                          <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="searchReplies(keyw.value, comment.id, 'magazine-' + group.ID)">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                        @for (reply of comment.replies; track reply) {
+                        <div class="reply-item">
+                          <div class="reply-header">
+                            <strong>{{ reply.username }}</strong>
+                            <span class="reply-timestamp">{{ reply.timestamp | date:'short' }}</span>
+                          </div>
+                          <div class="reply-text" [innerHTML]="reply.text"></div>
+                        </div>
+                        }
+                      </div>
+                      }
+                    </div>
+                    }
+                  </div>
+                  }
+                  @if (getComments('magazine-' + group.ID).length === 0) {
+                  <div class="no-comments">
+                    <p>No comments yet. Be the first to comment!</p>
+                  </div>
+                  }
+                </div>
+                }
+              </div>
+              <!-- End class="container result-box" *ngFor="let group of magazineResults" -->
+            </div>
+            }
+            <!-- End *ngIf="!showSpinner" [collapse]="isCollapsedMag" class="container result-box" -->
+          </div>
+          }
+          <!-- End *ngIf="mediaType == 'Magazine' || mediaType == 'All'" -->
+          <!-- Update ad between magazine and radio results (in-feed format) -->
+          @if (showBannerAd && !showSpinner && magazineResults.length > 0 && radioResults.length > 0) {
+          <div class="container">
+            <app-ad-unit [adSlot]="adService.adSlots.betweenResults"
+              [adFormat]="adService.getAdFormat('betweenResults')"
+              [layoutKey]="adService.getLayoutKey('betweenResults')" adClass="results-ad">
+            </app-ad-unit>
+          </div>
+          }
+          <!-- Radio Results Start -->
+          @if (showResults) {
+          <div>
+            @if (!showSpinner && radioResults.length > 0) {
+            <div id="radioResults" class="container result-box">
+              <h3>
+                <span>Radio Results (found: {{ rdResults }} limit: {{ limit }})</span>
+                @if (rdResultsExtra) {
+                <span>[More than {{ limit }} results available]</span>
+                }
+                <div class="Padding-btn">
+                  <span>
+                    <button id="radioCheckAll" class="btn btn-outline-primary btn-sm float-right" type="button"
+                      (click)="toggleAllRadioResults()">
+                      Select All
+                    </button>
+                  </span>
+                  <span>
+                    @if (isCollapsedRadio == true && !showSpinner && rdResults != 0) {
+                    <button type="button" (click)="isCollapsedRadio = !isCollapsedRadio"
+                      class="btn btn-outline-primary btn-sm float-right">
+                      Show
+                    </button>
+                    }
+                  </span>
+                  <span>
+                    @if (isCollapsedRadio == false && !showSpinner && rdResults != 0) {
+                    <button type="button" (click)="isCollapsedRadio = !isCollapsedRadio"
+                      class="btn btn-outline-primary btn-sm float-right">
+                      Hide
+                    </button>
+                    }
+                  </span>
+                </div>
+              </h3>
+              <hr />
+              <br />
+              @if (rdResultsExtra) {
+              <div class="alert alert-warning" role="alert">
+                More than {{ limit }} results available.
+              </div>
+              }
+            </div>
+            }
+            <!-- End class="container result-box" -->
+            @if (!showSpinner) {
+            <div [collapse]="isCollapsedRadio" class="container result-box">
+              @for (group of radioResults; track group) {
+              <div class="container result-box">
+                <!-- CHANGED: li -> div to keep HTML valid -->
+                <div class="result-item">
+                  <input class="checkBox" type="checkbox" name="radResult" value="article"
+                    (click)="radioIds = updateSectionIds(group.ID, 'radio')" />
+                  <div class="li-text">
+                    <div class="results-line-title" (click)="goToRadioDetails(group)">
+                      {{ group.Title }}
+                    </div>
+                    <div class="results-line-body">
+                      <div class="results-line-subtitle">
+                        <a [href]="group.NewspaperLink" target="_blank" rel="noopener">{{ group.Newspaper }}</a>
+                        @if (group.Author) {
+                        <span class="results-line-author">
+                          - {{ group.Author | lowercase }}
+                        </span>
+                        }
+                        @if (group.PublishDate) {
+                        <span class="results-line-publish-date">
+                          - {{ group.PublishDate | date : 'MMMM d, y h:mm a' }}
+                        </span>
+                        }
+                      </div>
+                      <p [innerHTML]="group.Summary"></p>
+                    </div>
+                  </div>
+                  <!-- End class="li-text" -->
+                  <!-- MEDIA ANALYTICS -->
+                  <div>
+                    <table class="ma-table">
+                      <tr>
+                        <td class="ma-cell">Nielsen Audience: <span class="value">210,14</span></td>
+                        <td class="ma-cell">Ad Value: <span class="value">$67</span></td>
+                        <td class="ma-cell">Calc Ad Value: <span class="value">$590</span></td>
+                      </tr>
+                      <tr>
+                        <td class="ma-cell">Calc Publicity Value: <span class="value">$467</span></td>
+                        <td class="ma-cell">Runtime: <span class="value">01:20</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <!-- Comment + Translate Buttons -->
+                  <div class="result-actions">
+                    <div class="comment-toggle-container">
+                      <button class="btn btn-sm btn-outline-info comment-toggle-btn" 
+                              (click)="toggleComments('radio-' + group.ID)">
+                        <i class="fa" [ngClass]="isCommentsExpanded('radio-' + group.ID) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        Comments ({{ getComments('radio-' + group.ID).length }})
+                      </button>
+                    </div>
+
+                    <button class="btn btn-sm btn-outline-secondary translate-btn"
+                            (click)="openTranslatePopup('radio', group)">
+                      <i class="fa fa-language"></i> Translate
+                    </button>
+                  </div>
+                  <!-- Comment Section -->
+                  @if (isCommentsExpanded('radio-' + group.ID)) {
+                  <div class="comment-section">
+                    <div class="add-comment-form">
+                      <textarea #newComment class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+                      <button class="btn btn-primary btn-sm mt-2" type="button"
+                        (click)="addComment('radio-' + group.ID, newComment.value); newComment.value = ''">
+                        Post Comment
+                      </button>
+                    </div>
+                    @if (getComments('radio-' + group.ID).length > 0) {
+                    <div class="comments-list">
+                      <div class="search-comment">
+                        <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                        <button class="btn btn-sm btn-link" type="button"
+                          (click)="searchComments(keyw.value, 'radio-' + group.ID)">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
+                      @for (comment of getComments('radio-' + group.ID); track comment) {
+                      <div class="comment-item">
+                        <div class="comment-header">
+                          <strong>{{ comment.username }}</strong>
+                          <span class="comment-timestamp">{{ comment.timestamp | date:'short' }}</span>
+                        </div>
+                        <div class="comment-text" [innerHTML]="comment.text"></div>
+                        <div class="comment-actions">
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="likeComment('radio-' + group.ID, comment.id)">
+                            <i class="fa fa-thumbs-up"></i> Like ({{ comment.likes }})
+                          </button>
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="dislikeComment('radio-' + group.ID, comment.id)">
+                            <i class="fa fa-thumbs-down"></i> Dislike ({{ comment.dislikes }})
+                          </button>
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="comment.showReplyForm = !comment.showReplyForm">
+                            <i class="fa fa-reply"></i> Reply
+                          </button>
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="comment.showEditForm = !comment.showEditForm">
+                            <i class="fas fa-edit"></i> Edit
+                          </button>
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="comment.showDelForm = !comment.showDelForm">
+                            <i class="fas fa-trash"></i> Delete
+                          </button>
+                        </div>
+                        @if (comment.showReplyForm) {
+                        <div class="reply-form">
+                          <textarea #replyText class="form-control" rows="1" placeholder="Write a reply..."></textarea>
+                          <button class="btn btn-primary btn-sm mt-1" type="button"
+                            (click)="addReply('radio-' + group.ID, comment.id, replyText.value); replyText.value = ''; comment.showReplyForm = false">
+                            Post Reply
+                          </button>
+                        </div>
+                        }
+                        @if (comment.showEditForm) {
+                        <div class="edit-form">
+                          <textarea #editText class="form-control" rows="1">{{ comment.text }}</textarea>
+                          <button class="btn btn-primary btn-sm mt-1" type="button"
+                            (click)="editComemnt(editText.value, 'radio-' + group.ID, comment.id); comment.showEditForm = false">
+                            Confirm
+                          </button>
+                        </div>
+                        }
+                        @if (comment.showDelForm) {
+                        <div class="edit-form">
+                          Would you like to delete this Comment?
+                          <button class="btn btn-primary btn-sm mt-1" type="button"
+                            (click)="deleteComment('radio-' + group.ID, comment.id); comment.showDelForm = false">
+                            Confirm
+                          </button>
+                          <button class="btn btn-primary btn-sm mt-1" type="button"
+                            (click)="comment.showDelForm = false">
+                            Cancel
+                          </button>
+                        </div>
+                        }
+                        @if (comment.replies && comment.replies.length > 0) {
+                        <div class="replies-list">
+                          <div class="search-Replies">
+                            <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="searchReplies(keyw.value, comment.id, 'radio-' + group.ID)">
+                              <i class="fa fa-search"></i>
+                            </button>
+                          </div>
+                          @for (reply of comment.replies; track reply) {
+                          <div class="reply-item">
+                            <div class="reply-header">
+                              <strong>{{ reply.username }}</strong>
+                              <span class="reply-timestamp">{{ reply.timestamp | date:'short' }}</span>
+                            </div>
+                            <div class="reply-text" [innerHTML]="reply.text"></div>
+                          </div>
+                          }
+                        </div>
+                        }
+                      </div>
+                      }
+                    </div>
+                    }
+                    @if (getComments('radio-' + group.ID).length === 0) {
+                    <div class="no-comments">
+                      <p>No comments yet. Be the first to comment!</p>
+                    </div>
+                    }
+                  </div>
+                  }
+                </div>
+                <!-- End class="container result-box" *ngFor="let group of radioResults" -->
+              </div>
+              }
+              <!-- End *ngIf="!showSpinner" -->
+            </div>
+            }
+            <!-- *ngIf="mediaType == 'Radio' -->
+
+            <!-- Update ad between radio and TV results (in-feed format) -->
+            @if (showBannerAd && !showSpinner && radioResults.length > 0 && televisionResults.length > 0) {
+            <div class="container">
+              <app-ad-unit [adSlot]="adService.adSlots.betweenResults"
+                [adFormat]="adService.getAdFormat('betweenResults')"
+                [layoutKey]="adService.getLayoutKey('betweenResults')" adClass="results-ad">
+              </app-ad-unit>
+            </div>
+            }
+            <!-- TV Results Start -->
+            @if (showResults) {
+            <div>
+              @if (!showSpinner && tvResultSize > 0) {
+              <div id="tvResults" class="container result-box">
+                <h3>
+                  <span>Television Results (found: {{ tvResults }} limit: {{ limit }})</span>
+                  @if (tvResultsExtra) {
+                  <span>[More than {{ limit }} results available]</span>
+                  }
+                  <span>
+                    <button id="tvCheckAll" class="btn btn-outline-primary btn-sm float-right" type="button"
+                      (click)="toggleAllTVResults()">
+                      Select All
+                    </button>
+                  </span>
+                  @if (selectedVideos.length > 0) {
+                  <span>
+                    <button id="editSelected" class="btn btn-outline-primary btn-sm float-right" type="button"
+                      (click)="editSelectedVideos()">
+                      Edit Selected ({{ selectedVideos.length }})
+                    </button>
+                  </span>
+                  }
+                  <span>
+                    @if (isCollapsedTv && !showSpinner && tvResults != 0) {
+                    <button type="button" (click)="isCollapsedTv = !isCollapsedTv"
+                      class="btn btn-primary btn-sm float-right">
+                      Show
+                    </button>
+                    }
+                  </span>
+                  <span>
+                    @if (!isCollapsedTv && !showSpinner && tvResults != 0) {
+                    <button type="button" (click)="isCollapsedTv = !isCollapsedTv"
+                      class="btn btn-primary btn-sm float-right">
+                      Hide
+                    </button>
+                    }
+                  </span>
+                </h3>
+                <hr />
+                @if (tvResultsExtra) {
+                <div class="alert alert-warning" role="alert">
+                  More than {{ limit }} results available.
+                </div>
+                }
+              </div>
+              }
+              @if (!showSpinner) {
+              <div [collapse]="isCollapsedTv" class="container result-box">
+                @for (group of televisionResults; track group; let i = $index) {
+                <div class="container result-box">
+                  <!-- RESULT START -->
+                  <!-- CHANGED: li -> div to keep HTML valid -->
+                  <div class="result-item">
+                    <input class="checkBox" type="checkbox" name="tvResult"
+                      (click)="videoChecked(group.data[0], $event)" />
+                    <div class="li-img" (click)="goToDetails(group.data[0], i)">
+                      <!-- Show Loading GIF until the thumbnail is ready -->
+                      @if (!group.data[0].thumbnailLoaded) {
+                      <div class="loading-container">
+                        <img src="https://i.gifer.com/ZKZg.gif" class="loading-gif" />
+                      </div>
+                      }
+                      <!-- Video Element (Hidden while loading GIF is visible) -->
+                      <video #videoPlayer [src]="group.data[0].videoSource"
+                        (loadedmetadata)="captureThumbnail(videoPlayer, group.data[0])"
+                        [class.thumbnail-loaded]="group.data[0].thumbnailLoaded" style="width: 100px; height: 100px;">
+                      </video>
+                    </div>
+                    <!-- CLIP INFO -->
+                    <div class="li-text">
+                      <div class="results-line-details-link" (click)="goToDetails(group.data[0], i)">
+                        {{ group.data[0].Channel_Name }}
+                      </div>
+                      <div class="results-line">
+                        Uploaded: {{ group.data[0].Created_at | date:'medium' }}
+                        ({{ getDaysSinceUpload(group.data[0].Created_at) }} days ago)
+                      </div>
+                      <div class="results-line">
+                        Duration: {{ group.data[0].duration || 'Loading...' }}
+                      </div>
+                      <div class="results-line description-section">
+                        <strong>Caption Match:</strong>
+                        <div class="transcript-content"
+                          [innerHTML]="group.data[0].Display_Text || group.data[0].Result_Line"></div>
+                      </div>
+                    </div>
+                    <!-- Comment + Translate Buttons -->
+                    <div class="result-actions">
+                      <div class="comment-toggle-container">
+                        <button class="btn btn-sm btn-outline-info comment-toggle-btn" 
+                                (click)="toggleComments('tv-' + group.location)">
+                          <i class="fa" [ngClass]="isCommentsExpanded('tv-' + group.location) ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                          Comments ({{ getComments('tv-' + group.location).length }})
+                        </button>
+                      </div>
+
+                      <button class="btn btn-sm btn-outline-secondary translate-btn"
+                              (click)="openTranslatePopup('tv', group.data[0])">
+                        <i class="fa fa-language"></i> Translate
+                      </button>
+                    </div>
+
+                    <!-- Comment Section -->
+                    @if (isCommentsExpanded('tv-' + group.location)) {
+                    <div class="comment-section">
+                      <div class="add-comment-form">
+                        <textarea #newComment class="form-control" rows="2" placeholder="Add a comment..."></textarea>
+                        <button class="btn btn-primary btn-sm mt-2" type="button"
+                          (click)="addComment('tv-' + group.location, newComment.value); newComment.value = ''">
+                          Post Comment
+                        </button>
+                      </div>
+                      @if (getComments('tv-' + group.location).length > 0) {
+                      <div class="comments-list">
+                        <div class="search-comment">
+                          <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                          <button class="btn btn-sm btn-link" type="button"
+                            (click)="searchComments(keyw.value, 'tv-' + group.location)">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                        @for (comment of getComments('tv-' + group.location); track comment) {
+                        <div class="comment-item">
+                          <div class="comment-header">
+                            <strong>{{ comment.username }}</strong>
+                            <span class="comment-timestamp">{{ comment.timestamp | date:'short' }}</span>
+                          </div>
+                          <div class="comment-text" [innerHTML]="comment.text"></div>
+                          <div class="comment-actions">
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="likeComment('tv-' + group.location, comment.id)">
+                              <i class="fa fa-thumbs-up"></i> Like ({{ comment.likes }})
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="dislikeComment('tv-' + group.location, comment.id)">
+                              <i class="fa fa-thumbs-down"></i> Dislike ({{ comment.dislikes }})
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="comment.showReplyForm = !comment.showReplyForm">
+                              <i class="fa fa-reply"></i> Reply
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="comment.showEditForm = !comment.showEditForm">
+                              <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-link" type="button"
+                              (click)="comment.showDelForm = !comment.showDelForm">
+                              <i class="fas fa-trash"></i> Delete
+                            </button>
+                          </div>
+                          @if (comment.showReplyForm) {
+                          <div class="reply-form">
+                            <textarea #replyText class="form-control" rows="1"
+                              placeholder="Write a reply..."></textarea>
+                            <button class="btn btn-primary btn-sm mt-1" type="button"
+                              (click)="addReply('tv-' + group.location, comment.id, replyText.value); replyText.value = ''; comment.showReplyForm = false">
+                              Post Reply
+                            </button>
+                          </div>
+                          }
+                          @if (comment.showEditForm) {
+                          <div class="edit-form">
+                            <textarea #editText class="form-control" rows="1">{{ comment.text }}</textarea>
+                            <button class="btn btn-primary btn-sm mt-1" type="button"
+                              (click)="editComemnt(editText.value, 'tv-' + group.location, comment.id); comment.showEditForm = false">
+                              Confirm
+                            </button>
+                          </div>
+                          }
+                          @if (comment.showDelForm) {
+                          <div class="edit-form">
+                            Would you like to delete this Comment?
+                            <button class="btn btn-primary btn-sm mt-1" type="button"
+                              (click)="deleteComment('tv-' + group.location, comment.id); comment.showDelForm = false">
+                              Confirm
+                            </button>
+                            <button class="btn btn-primary btn-sm mt-1" type="button"
+                              (click)="comment.showDelForm = false">
+                              Cancel
+                            </button>
+                          </div>
+                          }
+                          @if (comment.replies && comment.replies.length > 0) {
+                          <div class="replies-list">
+                            <div class="search-Replies">
+                              <input #keyw type="text" class="form-control search-item" placeholder="Search..." />
+                              <button class="btn btn-sm btn-link" type="button"
+                                (click)="searchReplies(keyw.value, comment.id, 'tv-' + group.location)">
+                                <i class="fa fa-search"></i>
+                              </button>
+                            </div>
+                            @for (reply of comment.replies; track reply) {
+                            <div class="reply-item">
+                              <div class="reply-header">
+                                <strong>{{ reply.username }}</strong>
+                                <span class="reply-timestamp">{{ reply.timestamp | date:'short' }}</span>
+                              </div>
+                              <div class="reply-text" [innerHTML]="reply.text"></div>
+                            </div>
+                            }
+                          </div>
+                          }
+                        </div>
+                        }
+                      </div>
+                      }
+                      @if (getComments('tv-' + group.location).length === 0) {
+                      <div class="no-comments">
+                        <p>No comments yet. Be the first to comment!</p>
+                      </div>
+                      }
+                    </div>
+                    }
+                  </div>
+                  <!-- Single Result End -->
+                </div>
+                }
+                <!-- End *ngFor="let group of televisionResults" -->
+              </div>
+              }
+              <!-- End *ngIf="!showSpinner" [collapse]="isCollapsedTv" -->
+            </div>
+            }
+            <!-- End *ngIf="mediaType == 'Television' || mediaType == 'All'" -->
+            <!-- Update footer ad -->
+            @if (showFooterAd && !showSpinner && resultsReady && totalResults > 0) {
+            <div class="container">
+              <app-ad-unit [adSlot]="adService.adSlots.footer" [adFormat]="adService.getAdFormat('footer')"
+                [width]="adService.getResponsiveAdSize('footer').width"
+                [height]="adService.getResponsiveAdSize('footer').height" adClass="footer-ad">
+              </app-ad-unit>
+            </div>
+            }
+          </div>
+          }
+          <!-- Sidebar ad that sits alongside results -->
+          @if (showSidebarAd && !showSpinner && resultsReady && totalResults > 0) {
+          <div class="sidebar-ad-container">
+            <app-ad-unit [adSlot]="adService.adSlots.sidebar" [adFormat]="adService.getAdFormat('sidebar')"
+              [width]="adService.getResponsiveAdSize('sidebar').width"
+              [height]="adService.getResponsiveAdSize('sidebar').height" adClass="sidebar-ad">
+            </app-ad-unit>
+          </div>
+          }
+        </div>
+        }
+        <!-- End class="exportthis" -->
+      </div>
+      }
+      <!-- End *ngIf="showResults" -->
+    </div>
+    <!-- End *ngIf='!showDetails' class="outermost-container" -->
+
+    <!-- END SEARCH RESULTS -->
+
+    <!-- DETAIL'S PAGE -->
+    @if (showDetails && (!showradio) && (mediaTypeHash.television || shouldFilter)) {
+    <div class="outermost-container">
+      <div class="outermost-container grid-wrapper">
+        <div class="container buttons-container-details">
+          @if (currentVideoIndex > 0) {
+          <button id="previousButton" type="button" class="btn prev-result" (click)="previousVideo()">
+            &laquo; Previous Video
+          </button>
+          }
+          @if (currentVideoIndex < selectedVideos.length - 1) { <button id="nextButton" type="button"
+            class="btn next-result" (click)="nextVideo()">
+            Next Video &raquo;
+            </button>
+            }
+        </div>
+        <div class="container details-content-container">
+          <div class="channel-name">
+            <h4>
+              {{ featuredDetails.Channel_Name }}
+              <span class="channel-date-time">
+                - {{ getFormattedDate(featuredDetails.Created_at) }}
+              </span>
+            </h4>
+          </div>
+          <div class="row">
+            <div class="details-content-container col-md-6 video-container">
+              <video class="placeholder-image" id="videoPlayer" controls crossorigin="anonymous">
+                <source [src]="videoSource" />
+                @if (ccSource) {
+                <track [src]="ccSource" label="Closed Caption" type="text/vtt" kind="captions" srclang="en-us"
+                  default />
+                }
+                <!-- old track line commented -->
+              </video>
+            </div>
+            <!-- End "details-content-container col-md-6" -->
+            <div class="details-content-container col-md-6">
+              <div class="results-line">
+                <div class="tab-content-container">
+                  <!-- Tabs -->
+                  <ul class="nav nav-tabs d-flex justify-content-around" id="mediaTabs" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="media-analytics-tab" data-toggle="tab" href="#media-analytics"
+                        role="tab" aria-controls="media-analytics" aria-selected="true">
+                        Media Analytics
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="editor-tab" data-toggle="tab" href="#editor" role="tab"
+                        aria-controls="editor" aria-selected="false" (click)="initializeVideo()">
+                        Clip Tool
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="download-tab" data-toggle="tab" href="#download" role="tab"
+                        aria-controls="download" aria-selected="false">
+                        Download
+                      </a>
+                    </li>
+                  </ul>
+                  <!-- Tab Content -->
+                  <div class="tab-content mt-3" id="mediaTabsContent">
+                    <!-- Media Analytics Tab -->
+                    <div class="tab-pane fade show active" id="media-analytics" role="tabpanel"
+                      aria-labelledby="media-analytics-tab">
+                      <select id="valueSelect" name="valueSelect" class="form-select" [(ngModel)]="selectedValue">
+                        <option value="audience">Audience</option>
+                        <option value="ad_value">Ad Value</option>
+                        <option value="calculated_ad_value">Calculated Ad Value</option>
+                        <option value="calculated_publicity_value">Calculated Publicity Value</option>
+                      </select>
+                      @if (selectedValue === 'audience') {
+                      <div class="chart-wrapper">
+                        <canvas baseChart [datasets]="audience" [labels]="lineChartLabels" [options]="lineChartOptions"
+                          [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+                          [plugins]="lineChartPlugins">
+                        </canvas>
+                      </div>
+                      }
+                      @if (selectedValue === 'ad_value') {
+                      <div class="chart-wrapper">
+                        <canvas baseChart [datasets]="adValue" [labels]="lineChartLabels" [options]="lineChartOptions"
+                          [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"
+                          [plugins]="lineChartPlugins">
+                        </canvas>
+                      </div>
+                      }
+                      @if (selectedValue === 'calculated_ad_value') {
+                      <div class="chart-wrapper">
+                        <canvas baseChart [datasets]="calAdValue" [labels]="lineChartLabels"
+                          [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+                          [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                        </canvas>
+                      </div>
+                      }
+                      @if (selectedValue === 'calculated_publicity_value') {
+                      <div class="chart-wrapper">
+                        <canvas baseChart [datasets]="calPublicityValue" [labels]="lineChartLabels"
+                          [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
+                          [chartType]="lineChartType" [plugins]="lineChartPlugins">
+                        </canvas>
+                      </div>
+                      }
+                    </div>
+                    <!-- Editor Tab -->
+                    <div class="tab-pane fade" id="editor" role="tabpanel" aria-labelledby="editor-tab">
+                      <div class="d-flex align-items-center mt-3" style="gap: 10px;">
+                        <label for="playbackRate" class="mb-0" style="line-height: 1.5;">Playback Rate:</label>
+                        <select id="playbackRate" class="form-select w-auto" style="height: auto;">
+                          <option value="0.5">0.5x</option>
+                          <option value="0.75">0.75x</option>
+                          <option value="1" selected>1x</option>
+                          <option value="1.25">1.25x</option>
+                          <option value="1.5">1.5x</option>
+                          <option value="2">2x</option>
+                        </select>
+                      </div>
+                      <!-- Time Input Section -->
+                      <div class="d-flex flex-column mt-3" style="gap: 15px;">
+                        <!-- Start Time -->
+                        <div class="d-flex align-items-center" style="gap: 10px;">
+                          <label for="startMinutes" class="mb-0" style="line-height: 1.5;">Start Time:</label>
+                          <input type="number" id="startMinutes" class="form-control" placeholder="MM" min="0"
+                            style="max-width: 20%;" />
+                          <span>:</span>
+                          <input type="number" id="startSeconds" class="form-control" placeholder="SS" min="0" max="59"
+                            style="max-width: 20%;" />
+                        </div>
+                        <!-- End Time -->
+                        <div class="d-flex align-items-center" style="gap: 10px;">
+                          <label for="endMinutes" class="mb-0" style="line-height: 1.5;">End Time:</label>
+                          <input type="number" id="endMinutes" class="form-control" placeholder="MM" min="0"
+                            style="max-width: 20%;" />
+                          <span>:</span>
+                          <input type="number" id="endSeconds" class="form-control" placeholder="SS" min="0" max="59"
+                            style="max-width: 20%;" />
+                        </div>
+                      </div>
+                      <button class="btn btn-primary mt-3" type="button" (click)="runFFMPEG()">Download</button>
+                    </div>
+                    <!-- Download Tab -->
+                    <div class="tab-pane fade" id="download" role="tabpanel" aria-labelledby="download-tab">
+                      <div class="form-group d-flex align-items-center">
+                        <label class="mr-3 mb-0">File Format:</label>
+                        <div class="form-check mr-3">
+                          <input type="checkbox" class="form-check-input" id="mp4" />
+                          <label class="form-check-label" for="mp4">mp4</label>
+                        </div>
+                        <div class="form-check mr-3">
+                          <input type="checkbox" class="form-check-input" id="mov" />
+                          <label class="form-check-label" for="mov">mov</label>
+                        </div>
+                        <div class="form-check mr-3">
+                          <input type="checkbox" class="form-check-input" id="avi" />
+                          <label class="form-check-label" for="avi">avi</label>
+                        </div>
+                        <div class="form-check mr-3">
+                          <input type="checkbox" class="form-check-input" id="mkv" />
+                          <label class="form-check-label" for="mkv">mkv</label>
+                        </div>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="webm" />
+                          <label class="form-check-label" for="webm">webm</label>
+                        </div>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="saveCaptions" />
+                        <label class="form-check-label" for="saveCaptions">Save Captions</label>
+                      </div>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="saveAnalytics" />
+                        <label class="form-check-label" for="saveAnalytics">Save Media Analytics</label>
+                      </div>
+                      <button class="btn btn-primary mt-3" type="button">Export</button>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline-primary" type="button" (click)="goToVideoEditor()">Edit Video</button>
+                <button type="button" class="btn btn-outline-primary back-to-results" (click)="backToResults()">Back to
+                  Results</button>
+                <button type="button" class="btn btn-outline-dark transcript-button" (click)="toggleCaption()">
+                  {{ showCaptions ? 'Hide Transcript' : 'Show Transcript' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="toast" class="toast hidden"></div>
+      </div>
+      <!-- End "container details-content-container" -->
+      <div [hidden]="!showCaptions" id="caption-box" class="caption-box">
+        <!-- Button row + search bar -->
+        <div class="button-box row align-items-center justify-content-between">
+          <!-- Left: Buttons -->
+          <div class="col-auto d-flex flex-wrap gap-2">
+            <button class="btn btn-primary caption-button" type="button" (click)="toggleDownloadBox(1)">Clip
+              Options</button>
+            <button class="btn btn-secondary caption-button" type="button">Translate</button>
+            <button class="btn btn-primary caption-button" type="button" (click)="toggleHighlight()"
+              id="toggleHighlight">
+              Disable Auto Highlight
+            </button>
+            <button class="btn btn-primary caption-button" type="button" (click)="toggleAutoScroll()"
+              id="toggleAutoScroll">
+              Disable Auto Scroll
+            </button>
+            <button hidden class="btn btn-primary caption-button" type="button" (click)="highlightSetClip()"
+              id="highlightSetClip">
+              Set Clip
+            </button>
+          </div>
+          <!-- Right: Search -->
+          <div class="col-auto">
+            <input #transcriptSearch type="text" class="form-control" style="max-width: 250px;"
+              placeholder="Search transcript..." (input)="searchTranscript(transcriptSearch.value)" />
+          </div>
+        </div>
+        <!-- Transcript content -->
+        <div class="caption-text-box">
+          <div class="row">
+            <!-- Left side: video segments -->
+            <div class="col-2 segments">
+              @for (s of videoSegments; track s; let i = $index) {
+              <div>
+                <div class="video-container">
+                  <div>
+                    <video id="videoPlayerSegment" width="240" height="180" crossorigin="anonymous"
+                      (click)="goToVideoSegment(s)">
+                      <source [src]="videoSource" />
+                    </video>
+                    {{ videoSegmentDetail(s, i) }}
+                  </div>
+                  <div class="video-overlay">
+                    <p>{{ s }} seconds</p>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+            <!-- Right side: transcript -->
+            <div class="col-9 closed-captions" id="closedCaptions"></div>
+          </div>
+          <!-- End class="row" -->
+          <!-- End class="caption-text-box" -->
+        </div>
+      </div>
+      <div class="download-box">
+        <div class="search-box">
+          <button type="button" class="x-button" (click)="toggleDownloadBox(0)">X</button>
+          <form>
+            <label for="clips">Choose the number of clips you want:</label>
+            <select #myClips name="clips" id="clips" (change)="setNumClips()">
+              <option value="" selected disabled>Select a number</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </form>
+          <form>
+            <label for="resolution">Choose the resolution you want:</label>
+            <select #resolution name="resolution" id="resolution" (change)="setResolution()">
+              <option value="" selected disabled>Select a resolution</option>
+              <option value="320:240">240p</option>
+              <option value="640:480">480p</option>
+              <option value="1280:720">720p</option>
+              <option value="1920:1080">1080p</option>
+            </select>
+          </form>
+          <form>
+            <label for="fileFormat">Choose the file type you want:</label>
+            <select #fileFormat name="fileFormat" id="fileFormat" (change)="setFileFormat()">
+              <option value="" selected disabled>Select a file type</option>
+              <option value=".mp4">mp4</option>
+              <option value=".mov">mov</option>
+              <option value=".avi">avi</option>
+              <option value=".mkv">mkv</option>
+              <option value=".webm">webm</option>
+            </select>
+          </form>
+          @if (numClips != 0) {
+          <div>
+            <div>
+              <button type="button" (click)="setStartTime()">Start</button>
+              <button type="button" (click)="setEndTime()">End</button>
+              <button type="button" (click)="reset()">Reset</button>
+            </div>
+          </div>
+          } @else {
+          <!-- Optional: put guidance text here -->
+          }
+          <div style="color: aliceblue; padding: 15px; min-width: 100px; display: inline-block;">
+            <table>
+              <tr>
+                <th>Trim Point</th>
+                @for (number of iterateNum; track trackByFn($index, number)) {
+                <th style="text-align: center;">{{ number + 1 }}</th>
+                }
+              </tr>
+              <tr>
+                <td>Start Times</td>
+                @for (number of iterateNum; track trackByFn($index, number)) {
+                <td>
+                  <input id="Start{{ number + 1 }}" class="col-md-3" (change)="changeStart(number, $event)"
+                    [value]="startTimes[number]" />
+                </td>
+                }
+              </tr>
+              <tr>
+                <td>End Times</td>
+                @for (number of iterateNum; track trackByFn($index, number)) {
+                <td>
+                  <input id="End{{ number + 1 }}" class="col-md-3" (change)="changeEnd(number, $event)"
+                    [value]="endTimes[number]" />
+                </td>
+                }
+              </tr>
+            </table>
+          </div>
+          <br />
+          <div class="row">
+            <button type="button" class="btn btn-outline-primary" (click)="videoEditor()">Trim Video</button>
+            @if (stitchedVideo !== '') {
+            <a [href]="stitchedVideo" target="_blank" [attr.download]="'video' + fileFormatValue">
+              <button type="button" class="btn btn-outline-primary">Download</button>
+            </a>
+            }
+          </div>
+        </div>
+        <!-- End class="search-box" -->
+      </div>
+      <!-- End download-box -->
+      <div class="row">
+        <div class="col-md-12">
+          <p [innerHTML]="featuredDetails.Result_Line"></p>
+        </div>
+      </div>
+    </div>
+    } <!-- End class="row" -->
+  </div> <!-- End "outermost-container" -->
+</div> <!-- End *ngIf="showDetails && (!showradio) && (mediaType == 'Television' -->
+
+@if (isTranslatePopupOpen) {
+<div class="translate-popup-backdrop" (click)="closeTranslatePopup()"></div>
+<div class="translate-popup" role="dialog" aria-modal="true">
+  <div class="translate-popup-header">
+    <div class="translate-popup-title">Translation</div>
+    <button type="button" class="btn btn-sm btn-outline-secondary" (click)="closeTranslatePopup()">Close</button>
+  </div>
+  <div class="translate-popup-body">
+    <div class="row select-group">
+      <label class="col-form-label right-align-label col-md-3">
+        Language of Results
+      </label>
+      <div class="col-md-9">
+        <app-languageTranslation (languageSelected)="onTranslatePopupLanguageSelected($event)"></app-languageTranslation>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+
+<!-- Bookmark Menu -->
+<div class="bookmark-menu" [class.open]="bookmarkMenuVisible">
+  <h3>Bookmarked Sources</h3>
+  <ul>
+    @for (source of bookmarkedSources; track source) {
+    <li>
+      {{ source.name }}
+    </li>
+    }
+  </ul>
+  <!-- <button (click)="toggleBookmarkMenu()">Close</button> -->
+</div>
+
+<!-- Email-Alerts-Setup Confirmation Modal -->
+<div id="setupConfirmationModal" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body confirmation-text">
+        <h1>Email alert set.</h1>
+        <p>Email alerts may be managed by clicking on "Email alerts" in the navigation bar at the top of the page.</p>
+      </div>
+      <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="newSearch()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Email-Alerts-Setup Error Modal -->
+<div id="invalidSetupModal" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body confirmation-text">
+        Minimal email alert setup requires a search query, email address, and real time alert selection.
+      </div>
+      <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Okay</button>
+    </div>
+  </div>
+</div>

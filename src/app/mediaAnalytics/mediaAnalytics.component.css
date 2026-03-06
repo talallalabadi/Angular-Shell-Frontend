@@ -1,0 +1,42 @@
+.welcome-box {
+    text-align: center;
+    font: 25px "Lato", sans-serif;
+    letter-spacing: 6px;
+    padding: 30px;
+}
+
+.search-box {
+    max-width: 900px;
+    padding: 20px;
+    padding-right: 120px;
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .select-group {
+    margin-bottom: 20px;
+    padding-right: 20px;
+  }
+
+  .col-form-label {
+    font: 15px "Lato", sans-serif;
+  }
+
+  .right-align-label {
+    text-align: right;
+  }
+
+.chart-wrapper {
+  width: 50%;
+  height: 600px;
+  margin: 0 auto;
+}
+
+
+#buttons {
+  text-align: center;
+  margin: 30px;
+}
+#create-button {
+  margin: 0 auto;
+}

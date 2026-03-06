@@ -1,0 +1,14 @@
+@if (isLoading) {
+  <div class="spinner-container">
+    @if (progress !== null && progress !== 100) {
+      <p class="loading-text">{{ progress }}%</p>
+    }
+    <!-- Switch between indeterminant and determinant spinners-->
+    @if (progress === null || progress === 100) {
+      <mat-spinner [diameter]="50"></mat-spinner>
+    }
+    @if (progress !== null && progress !== 100) {
+      <mat-progress-spinner [value]="progress" [diameter]="50"></mat-progress-spinner>
+    }
+  </div>
+}

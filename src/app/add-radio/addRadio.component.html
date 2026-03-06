@@ -1,0 +1,55 @@
+<div class="outermost-container">
+  <div class="container main-text-box">
+    <h2>Add a New Radio Station-  THIS SECTION OF THE WEBSITE IS UNDER CONSTRUCTION</h2>
+
+    @if (successMessage) {
+      <div class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+    }
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <div class="container addRadio-box">
+      <div class="row">
+        <label for="name-input" class="col-form-label right-align-label col-md-3">
+          Radio Station Name
+        </label>
+        <input id="name-input" class="form-control addRadio-item col-md-3" [(ngModel)]="radio.name" name="name" />
+        <label for="country-input" class="col-form-label right-align-label col-md-3">Country</label>
+        <input id="country-input" class="form-control addRadio-item col-md-3" [(ngModel)]="radio.country" name="country" />
+      </div>
+
+      <div class="row" style="margin-top: 0.75rem;">
+        <label for="state-input" class="col-form-label right-align-label col-md-3">State/Province</label>
+        <input id="state-input" class="form-control addRadio-item col-md-3" [(ngModel)]="radio.state" name="state" />
+        <label for="city-input" class="col-form-label right-align-label col-md-3">City</label>
+        <input id="city-input" class="form-control addRadio-item col-md-3" [(ngModel)]="radio.city" name="city" />
+      </div>
+
+      <div class="row" style="margin-top: 0.75rem;">
+        <label for="home-URL-input" class="col-form-label right-align-label col-md-3">URL to Radio's Source</label>
+        <input id="home-URL-input" class="form-control addRadio-item col-md-3" [(ngModel)]="radio.url" name="url" />
+        <div class="col-md-6 align-self-center">
+          <small class="text-muted">Include http:// or https://</small>
+        </div>
+      </div>
+
+      <div class="text-center" style="margin-top: 1rem;">
+        <button
+          class="btn btn-outline-primary submit-button"
+          [disabled]="!checkFilled() || submitting"
+          (click)="addRadio()"
+          >
+          @if (submitting) {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          }
+          {{ submitting ? 'Submitting...' : 'Add Radio Station' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

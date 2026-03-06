@@ -1,0 +1,81 @@
+<div class="ad-debug-container">
+  <h3>AdSense Diagnostic Tool</h3>
+
+  <div class="status-panel">
+    <div class="status-header">
+      <span>AdSense Status: </span>
+      <span class="status-badge" [ngClass]="{'status-ok': adStatus.loaded && !adStatus.errors.length, 'status-warning': adStatus.loaded && adStatus.errors.length, 'status-error': !adStatus.loaded}">
+        {{adStatus.loaded && !adStatus.errors.length ? 'OK' :
+        adStatus.loaded && adStatus.errors.length ? 'WARNING' : 'ERROR'}}
+      </span>
+      <button class="refresh-btn" (click)="checkStatus()">Refresh Status</button>
+    </div>
+
+    @if (isLocalEnvironment) {
+      <div class="local-warning">
+        <strong>⚠️ Running in Local Development Environment</strong>
+        <p>Actual AdSense ads won't appear in local development. Mock ads are shown instead.</p>
+        <p>Deploy to an approved domain to see real ads.</p>
+      </div>
+    }
+
+    @if (adStatus.errors.length > 0) {
+      <div class="errors-panel">
+        <h4>Issues Detected:</h4>
+        <ul>
+          @for (error of adStatus.errors; track error) {
+            <li>{{error}}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="test-ads">
+      <h4>Test Ad Units</h4>
+      <div class="test-ad-grid">
+        <div class="test-ad-item">
+          <h5>Banner Ad</h5>
+          <app-ad-unit
+            [adSlot]="adService.adSlots.banner"
+            [adFormat]="adService.getAdFormat('banner')"
+            [width]="adService.getResponsiveAdSize('banner').width"
+            [height]="adService.getResponsiveAdSize('banner').height"
+            adClass="banner-ad">
+          </app-ad-unit>
+        </div>
+
+        <div class="test-ad-item">
+          <h5>Sidebar Ad</h5>
+          <app-ad-unit
+            [adSlot]="adService.adSlots.sidebar"
+            [adFormat]="adService.getAdFormat('sidebar')"
+            [width]="adService.getResponsiveAdSize('sidebar').width"
+            [height]="adService.getResponsiveAdSize('sidebar').height"
+            adClass="sidebar-ad">
+          </app-ad-unit>
+        </div>
+
+        <div class="test-ad-item">
+          <h5>Between Results Ad</h5>
+          <app-ad-unit
+            [adSlot]="adService.adSlots.betweenResults"
+            [adFormat]="adService.getAdFormat('betweenResults')"
+            [layoutKey]="adService.getLayoutKey('betweenResults')"
+            adClass="results-ad">
+          </app-ad-unit>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="troubleshooting">
+    <h4>Troubleshooting Tips</h4>
+    <ul>
+      <li>AdSense ads require an approved domain - they won't display on localhost</li>
+      <li>Check the AdSense console for account status: <a href="https://www.google.com/adsense" target="_blank">https://www.google.com/adsense</a></li>
+      <li>Verify your AdSense Publisher ID is correct: <code>ca-pub-9469262490380516</code></li>
+      <li>Make sure you're not using an ad blocker in your browser</li>
+      <li>To test real ads, deploy to a staging environment with a real domain</li>
+    </ul>
+  </div>
+</div>

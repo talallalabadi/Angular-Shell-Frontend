@@ -1,0 +1,332 @@
+.timeline-container {
+    width: 100%;
+    height: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    margin: 15px 0;
+    position: relative;
+    user-select: none;
+}
+
+.timeline-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;  /* Unplayed portion - gray */
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #007bff;  /* Played portion - blue */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Ensure the timeline is fully visible */
+.thumbnail-timeline-container {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    background: #222;
+    padding: 5px;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+}
+
+/* Prevent text selection when dragging */
+.thumbnail-timeline-container,
+.thumbnail-timeline,
+.thumbnail-frame,
+.thumbnail-timestamp {
+    user-select: none; /* Prevents highlighting */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Edge */
+}
+
+.thumbnail-timeline-container:active {
+    cursor: grabbing;
+}
+
+/* The thumbnail row */
+.thumbnail-timeline {
+    display: flex;
+    flex-grow: 1;
+    overflow-x: hidden; /* Prevent scrolling */
+    position: relative;
+    cursor: pointer;
+}
+
+/* Individual thumbnails */
+.thumbnail-frame {
+    width: calc(100% / 10);
+    height: 60px;
+    position: relative;
+    border-right: 1px solid #444;
+    pointer-events: none; /* Prevent clicking */
+}
+
+/* Thumbnails themselves */
+.thumbnail-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+/* Timestamp below thumbnails */
+.thumbnail-timestamp {
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 5px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Playhead (Red Vertical Bar) */
+.playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: red;
+    transition: none; /* Removes delay so playhead moves instantly */
+    pointer-events: none;
+    z-index: 10; /* Ensure it stays above thumbnails */
+}
+
+
+/* Playhead Timestamp (Above the Playhead) */
+.playhead-timestamp {
+    position: absolute;
+    bottom: 100%; /* Position above the playhead */
+    transform: translateX(-50%); /* Center the timestamp above the playhead */
+    background: black; /* Background color for visibility */
+    color: white; /* Text color */
+    font-size: 14px; /* Font size */
+    padding: 2px 5px; /* Padding for better readability */
+    border-radius: 4px; /* Rounded corners */
+    white-space: nowrap; /* Prevent text from wrapping */
+    pointer-events: none; /* Prevent interaction */
+    z-index: 11; /* Ensure it's above the playhead and other elements */
+}
+
+
+
+
+
+
+.cut-selected {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.5); /* Semi-transparent red */
+    z-index: 15;
+    pointer-events: none;
+}
+
+
+.volume-container {
+    position: relative;
+    display: inline-block;
+}
+
+.volume-slider {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 100px;
+    background: white;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.volume-range {
+    writing-mode: bt-lr; /* Makes the slider vertical */
+    -webkit-appearance: slider-vertical; /* For Safari/Chrome */
+    width: 8px;
+    height: 80px;
+}
+
+.playback-speed-container {
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.playback-speed-container select {
+    padding: 2px;
+    font-size: 14px;
+}
+
+/* Cut Marker (Vertical Line on Timeline) */
+.cut-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: yellow; /* Highlighted cut color */
+    z-index: 12; /* Above everything else */
+}
+
+
+/* Highlight selected section */
+.cut-selected {
+    background: red !important; /* Highlights the selected section */
+    opacity: 0.7;
+}
+
+.deleted-segment-highlight {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.5); /* Semi-transparent gray for deleted segments */
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Filter controls container styles */
+.filter-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: absolute; /* Allows free movement */
+  top: 50%; /* Center vertically */
+  right: 10px; /* Align to the right side */
+  transform: translateY(-70%); /* Adjust for vertical centering */
+  z-index: 1000;
+  width: 300px; /* Fixed width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.233); /* Add a shadow for better visibility */
+}
+
+/* Filter controls label styles */
+.filter-controls label {
+  font-size: 14px;
+}
+
+/* Range input for sliders */
+.filter-controls input[type="range"] {
+  width: 100%;
+}
+
+/* Container for slider and number input */
+.slider-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Range input for slider */
+.slider-input-container input[type="range"] {
+  flex: 1;
+}
+
+/* Number input for slider */
+.slider-input-container input[type="number"] {
+  width: 60px;
+  text-align: center;
+}
+
+/* Rounded corners for number input boxes */
+.slider-input-container input[type="number"] {
+  width: 60px;
+  text-align: center;
+  border-radius: 7px; /* Rounded corners */
+  border: 1px solid #ccc; /* Add a border for better visibility */
+  padding: 5px; /* Add padding for better spacing */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for hover/focus */
+}
+
+/* Hover effect for number input boxes */
+.slider-input-container input[type="number"]:hover {
+  border-color: #007bff; /* Change border color on hover */
+}
+
+/* Focus effect for number input boxes */
+.slider-input-container input[type="number"]:focus {
+  border-color: #007bff; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a glow effect on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Filter controls header styles */
+.filter-controls-header {
+  background-color: #ccc; /* Light gray background */
+  padding: 5px; /* Padding for better click area */
+  cursor: grab; /* Show grab cursor */
+  text-align: center; /* Center the text */
+  font-weight: bold; /* Bold text */
+  border-bottom: 1px solid #aaa; /* Separator line */
+  border-radius: 7px 7px 7px 7px; /* Rounded corners for the top */
+  transition: background-color 0.2s ease; /* Smooth transition for hover/click */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.184);
+}
+
+/* Active state for filter controls header */
+.filter-controls-header:active {
+  cursor: grabbing; /* Change cursor to grabbing */
+}
+
+/* Darkened style when clicked */
+.filter-controls-header.clicked {
+  background-color: #bbb; /* Darker gray when clicked */
+}
+
+/*Reset button for filter controls */
+.filter-controls button {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  padding: 8px 12px; /* Add padding for better spacing */
+  border-radius: 7px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Bold text */
+  transition: background-color 0.2s ease; /* Smooth hover effect */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.249);
+
+}
+
+/* Hover effect for buttons */
+.filter-controls button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.video-editor-tools button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.video-editor-tools button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.video-editor-tools button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}

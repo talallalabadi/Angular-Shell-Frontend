@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <a
+    class="navbar-brand d-flex align-items-center"
+    [routerLink]="isAuthenticated ? '/search' : '/'"
+    >
+    <img [src]="logoPath" width="32" height="32" alt="Company logo">
+    <span class="brand-name ml-2">{{ companyName }} &reg;</span>
+  </a>
+
+  <button class="navbar-toggler" type="button" (click)="toggleMenu()" aria-controls="navbarSupportedContent"
+    [attr.aria-expanded]="isMenuOpen" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" [class.show]="isMenuOpen" id="navbarSupportedContent">
+    @if (isAuthenticated) {
+      <ul class="navbar-nav mr-auto primary-items">
+        @for (item of menuItems; track item) {
+          <li class="nav-item" [class.placeholder]="item.placeholder">
+            <a href="#" class="nav-link" (click)="onMenuItemClick(item, $event)">{{ item.label }}</a>
+          </li>
+        }
+        <li class="nav-item">
+          <a href="#" class="nav-link" (click)="onLogoutClick($event)">Logout</a>
+        </li>
+      </ul>
+      <!-- DISABLED: User avatar/initials button and dropdown menu commented out - Avatar and Sign out hidden from top navigation -->
+      <!-- <ul class="navbar-nav ml-auto">
+      <li class="nav-item user-menu" *ngIf="isAuthenticated">
+        <button type="button" class="nav-link user-initial" (click)="toggleUserMenu($event)" aria-haspopup="true" [attr.aria-expanded]="isUserMenuOpen">
+          {{ userInitials }}
+        </button>
+        <div class="dropdown-menu user-dropdown" [class.show]="isUserMenuOpen">
+          <span class="dropdown-header" *ngIf="userEmail">{{ userEmail }}</span>
+          <button class="dropdown-item sign-out-item" (click)="logout()">Sign out</button>
+        </div>
+      </li>
+    </ul> -->
+  } @else {
+    <ul class="navbar-nav mr-auto primary-items">
+      <li class="nav-item"><a class="nav-link" routerLink="/register">Sign Up</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/login" [routerLinkActiveOptions]="{ exact: true }">Login</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/information">Information</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/help">Help</a></li>
+    </ul>
+  }
+
+  <!-- Pre-login view: ordered per demo (Sign Up | Login | Information | Help) -->
+</div>
+</nav>
+<div id="container" class="translate-container">
+  <div id="google_translate_element"></div>
+</div>
+<div id="langContainer2" class="translate-container"></div>
+

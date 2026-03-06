@@ -1,0 +1,39 @@
+<div class="view-profile-container register-container">
+  <div class="container view-profile-header">
+    User Profile
+  </div>
+
+  <div class="container view-profile-box edit-profile-box profile-card">
+    <div class="profile-info-row">
+      <span class="profile-info-label">Email:</span>
+      <span class="profile-info-value">{{ user.email }}</span>
+    </div>
+
+    <div class="profile-info-row">
+      <span class="profile-info-label">First Name:</span>
+      <span class="profile-info-value">{{ user.firstName }}</span>
+    </div>
+
+    <div class="profile-info-row">
+      <span class="profile-info-label">Last Name:</span>
+      <span class="profile-info-value">{{ user.lastName }}</span>
+    </div>
+
+    <div class="profile-info-row">
+      <span class="profile-info-label">Role:</span>
+      <span class="profile-info-value">{{ user.role }}</span>
+    </div>
+
+    <div class="profile-actions">
+      <a routerLink="/profile/change-password"
+         class="btn btn-outline-primary profile-btn">
+        Change Password
+      </a>
+
+      <a routerLink="/search"
+         class="btn btn-outline-secondary profile-btn">
+        Back
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+/*
+**Adding a standard to sizing, no need to manually change sizing etc. Just a scale factor
+*/
+
+
+
+// "Contact Us Form" text, made bold to stand out
+.form-box{
+  font-size: 2.5rem;
+  font-weight: bold; 
+}
+
+.form-container { 
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  margin-top: 4rem; //distance from top of website
+}
+
+.form-box {
+  margin-top: 0.3rem;
+  max-width: 25rem; //400px
+  width: 100%;
+  align-items: center;
+}
+
+.title-box {
+  text-align:center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.form {
+  text-align: center;
+  font-size: 1.618rem; //roughly 26px
+  font-family: "Lato", sans-serif;
+  letter-spacing: 0.063rem; //roughly 1px
+}
+
+.form-item {
+  margin-bottom: 0.625rem; //10px
+  letter-spacing: 0.188rem; //3px
+}
+
+.btn-outline-primary{
+  font-size: 1.25rem;
+}
+
+//!! Unsure how to properly fix the right displacement of submit box. Upon reload it re-centers itself, but else once log out then log back in, it fractures right.
+//figured out that you had to use the nodemodules, bootstrap _buttons.scss and it would finally work.
+.btn {
+  margin: 0 !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  letter-spacing: 0.188rem; //3px
+}
+
+.form-text {
+  letter-spacing: 0.188rem; //3px
+}

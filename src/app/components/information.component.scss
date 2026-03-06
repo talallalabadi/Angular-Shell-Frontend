@@ -1,0 +1,49 @@
+.information-page {
+  padding: 2.5rem 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+  color: #1e293b;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .intro {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: #475569;
+  }
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  line-height: 1.75;
+  font-size: 1.05rem;
+  color: #334155;
+
+  p {
+    margin: 0;
+    text-align: justify;
+  }
+}
+
+@media (max-width: 768px) {
+  .information-page {
+    padding: 2rem 1.25rem;
+  }
+
+  .info-section {
+    font-size: 1rem;
+  }
+}
+

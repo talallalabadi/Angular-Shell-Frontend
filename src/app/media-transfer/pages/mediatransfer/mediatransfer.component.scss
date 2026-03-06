@@ -1,0 +1,399 @@
+//Pulsing button styling - Bennett Godinho-Nelson
+.btn-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+  margin: 0 auto;
+  background-color: #007bff; 
+  color: white;
+  border: none;
+  position: relative; 
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+/* Pulsing effect on the outside */
+.btn-circle::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: rgba(128, 128, 128, 0.5); /* Light grey pulse */
+  z-index: -1;
+  animation: outerPulse 1.0s infinite ease-out;
+}
+
+/* Pulse Animation */
+@keyframes outerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Hover Effect */
+.btn-circle:hover {
+  background: #0069d9;
+  transform: scale(1.05);
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+/* Select Files to send to Recipient page */
+
+.transfer-container {
+  justify-content: center;
+  text-align:center;
+  display:block;
+  padding: 20px;
+}
+
+.email-drafting-screen {
+  width: 90vw;
+  max-width: 100vh;
+  height: 80vh;
+  margin: 5vh auto;
+  background-color: #f2f6fa;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2vh;
+  border-color: black;
+  padding: 3vh;
+  box-shadow: 0 2vh 4vh rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  margin-bottom:2vh
+}
+
+h4 {
+  letter-spacing: 0px
+}
+
+.drafting-container {
+  display: flex;
+  height: 50vh;
+  max-width: 100vh;
+}
+
+/* Left file column features */
+
+.file-column {
+  flex: 1;
+  padding: 1vh;
+  min-width: 30vh;      
+  max-width: 50vh;       
+  overflow: hidden;      
+  text-overflow: ellipsis; 
+  white-space: nowrap;   
+}
+
+.file-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.add-files-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  border: none;
+}
+
+.add-files-btn:hover {
+  background: #0069d9;
+  transform: rotate(30deg) scale(1.2);
+  transition: transform 0.1s ease-in, background 0.1s ease-out;
+}
+
+.file-list {
+  max-height: 28vh;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.remove-file {
+  background: none;
+  border: none;
+  color: #ff4444;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+/* Separator line */
+
+.separator-column {
+  width: 1px;
+  background-color: #252525;
+  margin: 0 auto;
+}
+
+/* Right email column features */
+
+.email-column {
+  flex: 2;
+  padding: 1vh;
+  justify-content: space-between;
+  min-width: 40vh;      
+  max-width: 40vh;
+  overflow: hidden;
+}
+
+.email-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.email-scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1vh;
+  height: 30vh;
+}
+
+.email-drafting-screen .container {
+  width: 100%;
+  text-align: center;
+}
+
+.email-drafting-screen h1 {
+  margin-top: 0;
+  padding: 20px 0;
+  font-size: 1.8rem;
+}
+
+.form-group {
+  margin-bottom: 1vh;
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid gray;
+  border-radius: 0;
+  padding: 8px 0;
+  width: 100%;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  border-bottom: 2px solid #007bff;
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+}
+
+/* Email Chips */
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  min-height: 2.5vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-word;
+}
+
+.chip {
+  background-color: #2a6edc;
+  color: white;
+  padding: 0.4vh 1.2vh;
+  border-radius: 1.5vh;
+  margin: 0.4vh;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  justify-content: space-between;
+  max-width: 100%;
+  word-break: break-word; /* allows breaking inside long words */
+  white-space: normal; /* allows wrapping */
+  overflow-wrap: break-word;
+  text-align: left;
+
+  /* Animation */
+  animation: slideIn 0.4s ease-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.remove-chip {
+  margin-left: 0.8vh;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.email-input-chip {
+  border: none;
+  border-bottom: 1px solid gray;
+  border-radius: 0;
+  padding: 8px 0;
+  width: 100%;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+}
+
+.email-input-chip:focus {
+  border-bottom: 2px solid #007bff;
+}
+
+/* Send Email button */
+.send-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: .5vh;
+}
+
+.send-button-container:hover{
+  transform: scale(1.02);
+  transition: transform 0.1s ease, background 0.1s ease;
+}
+
+/* Status messages */
+
+.success-message {
+  color: rgb(51,153,0);
+  margin-top: 5vh;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.error-message {
+  color: rgb(204,51,0);
+  margin-top: 5vh;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.warning-message {
+  color: rgb(233, 188, 11);
+  margin-top: 5vh;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.admin-panel {
+  margin: 24px auto 0;
+  max-width: 1200px;
+  text-align: left;
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+}
+
+.admin-section {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.admin-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.admin-row input,
+.admin-row select,
+.admin-section textarea {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.admin-section textarea {
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  vertical-align: top;
+}
+
+.days-input {
+  width: 70px;
+  margin: 0 6px;
+}
+
+.admin-msg {
+  margin: 6px 0;
+}
+
+.success-text {
+  color: #217a00;
+}
+
+.error-text {
+  color: #b00020;
+}
+
+.admin-loading {
+  margin-top: 8px;
+  font-weight: 600;
+}

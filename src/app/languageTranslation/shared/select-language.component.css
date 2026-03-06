@@ -1,0 +1,67 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header-container,
+.filter-wrapper,
+.language-list-container {
+    width: 100%;
+    max-width: 90vw;
+}
+
+.header-container {
+    padding: 0 2vw;
+    text-align: left;
+    margin-bottom: 2vh;
+}
+
+
+
+.language-list-container {
+    padding: 2vh 2vw;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+
+.app-language-row {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 2vh;
+    min-height: 5vh;
+}
+
+
+.language-selector {
+    width: 100%;
+    max-width: 900px;
+  }
+  
+  .selector-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  
+  .popdown {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: 
+      max-height 0.4s ease,
+      opacity 0.3s ease;
+  }
+  
+  .popdown.open {
+    max-height: 80vh;
+    opacity: 1;
+  }

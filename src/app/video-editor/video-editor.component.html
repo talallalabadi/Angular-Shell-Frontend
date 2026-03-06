@@ -1,0 +1,198 @@
+<div class="video-editor-container">
+  <h3>Video Editor - {{featuredDetails?.Title}}</h3>
+  <div style="display: flex; align-items: flex-start; height: 100%; width: 100%;">
+    <!-- Video (75% width) -->
+    <video #videoPlayer crossorigin="anonymous" playsinline oncontextmenu="return false;"
+      [style.width]="'75%'" [style.height]="'auto'">
+      <source [src]="videoSource">
+      <track [src]="ccSource" label="English" kind="captions" srclang="en">
+    </video>
+
+    <!-- Transcript Box (25% width, same height as video) -->
+    @if (transcriptVisible) {
+      <div
+        style="width: 25%; padding: 10px; border: 1px solid #ccc; overflow-y: auto;"
+        [style.height.px]="videoHeight">
+        @for (caption of captions; track caption) {
+          <p>{{ caption }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="custom-controls">
+    <button (click)="togglePlayPause()">
+      <i class="fa" [ngClass]="isPlaying ? 'fa-pause' : 'fa-play'"></i>
+    </button>
+    <div class="volume-container"
+      (mouseenter)="showVolumeSlider()"
+      (mouseleave)="hideVolumeSlider()">
+      <button (click)="toggleMute()">
+        <i class="fa" [ngClass]="isMuted ? 'fa-volume-mute' : 'fa-volume-up'"></i>
+      </button>
+      @if (volumeSliderVisible) {
+        <div class="volume-slider">
+          <input type="range"
+            class="volume-range"
+            orient="vertical"
+            min="0"
+            max="1"
+            step="0.01"
+            [value]="currentVolume"
+            (input)="setVolume($event)">
+          </div>
+        }
+      </div>
+
+      <button (click)="toggleCaptions()">
+        <i class="fa fa-closed-captioning"
+          [ngStyle]="{'color': captionsEnabled ? 'blue' : 'gray'}">
+        </i>
+      </button>
+
+      <button (click)="toggleTranscript()">Show Transcript</button>
+
+
+      <div class="playback-speed-container">
+        <label for="playbackSpeed">Speed:</label>
+        <select id="playbackSpeed" (change)="changePlaybackSpeed($event)">
+          @for (speed of playbackSpeeds; track speed) {
+            <option [value]="speed" [selected]="speed === currentPlaybackSpeed">
+              {{speed}}x
+            </option>
+          }
+        </select>
+      </div>
+      <button (click)="setCut()">
+        <i class="fa fa-scissors"></i>
+      </button>
+      <button (click)="toggleDeleteMode()">
+        <i class="fa fa-eraser" [ngStyle]="{'color': deleteMode ? 'red' : 'black'}"></i>
+      </button>
+      <button (click)="toggleFilterControls()">
+        <i class="fa fa-adjust" [ngStyle]="{'color': filterControlsVisible ? 'blue' : 'black'}"></i>
+      </button>
+
+      <button (click)="undo()" [disabled]="undoStack.length === 0">
+        <i class="fa fa-undo"></i> Undo
+      </button>
+      <button (click)="redo()" [disabled]="redoStack.length === 0">
+        <i class="fa fa-redo"></i> Redo
+      </button>
+    </div>
+
+    @if (filterControlsVisible) {
+      <div class="filter-controls">
+        <div class="filter-controls-header" (mousedown)="startDrag($event)">
+          Drag Me
+        </div>
+        <br>
+          <label for="hue">Hue:</label>
+          <div class="slider-input-container">
+            <input type="range" id="hue" min="0" max="360" step="1" [(ngModel)]="filterSettings.hue" (input)="applyFilters()">
+            <input type="number" min="0" max="360" step="1" [(ngModel)]="filterSettings.hue" (input)="applyFilters()" (focus)="clearInput($event)">
+          </div>
+          <label for="brightness">Brightness:</label>
+          <div class="slider-input-container">
+            <input type="range" id="brightness" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.brightness" (input)="applyFilters()">
+            <input type="number" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.brightness" (input)="applyFilters()" (focus)="clearInput($event)">
+          </div>
+          <label for="contrast">Contrast:</label>
+          <div class="slider-input-container">
+            <input type="range" id="contrast" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.contrast" (input)="applyFilters()">
+            <input type="number" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.contrast" (input)="applyFilters()" (focus)="clearInput($event)">
+          </div>
+          <label for="saturation">Saturation:</label>
+          <div class="slider-input-container">
+            <input type="range" id="saturation" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.saturation" (input)="applyFilters()">
+            <input type="number" min="0" max="2" step="0.1" [(ngModel)]="filterSettings.saturation" (input)="applyFilters()" (focus)="clearInput($event)">
+          </div>
+          <button (click)="resetFilters()">Reset</button>
+        </div>
+      }
+
+      <div class="thumbnail-timeline-container"
+        (mousedown)="startDraggingPlayhead($event)"
+        (mousemove)="dragPlayhead($event)"
+        (mouseup)="stopDraggingPlayhead()"
+        (mouseleave)="stopDraggingPlayhead()"
+        (click)="timelineClicked($event)"
+        (mousemove)="highlightSegment($event)"
+        (click)="selectSegmentToDelete($event)">
+
+        <!-- Deleted sections highlighted in gray -->
+        @for (deleted of deletedSegments; track deleted) {
+          <div
+            class="deleted-segment-highlight"
+            [style.left.%]="(deleted.start / videoDuration) * 100"
+            [style.width.%]="((deleted.end - deleted.start) / videoDuration) * 100">
+          </div>
+        }
+
+
+        <!-- Playhead Timestamp -->
+        <div class="playhead-timestamp"
+          [style.left.%]="(currentTime / videoDuration) * 100">
+          {{ formatTimeWithMilliseconds(currentTime) }}
+        </div>
+
+        <!-- Highlighted section when hovering in delete mode -->
+        @if (selectedDeleteRange && deleteMode) {
+          <div
+            class="cut-selected"
+            [style.left.%]="(selectedDeleteRange.start / videoDuration) * 100"
+            [style.width.%]="((selectedDeleteRange.end - selectedDeleteRange.start) / videoDuration) * 100">
+          </div>
+        }
+
+
+        <!-- Playhead (Red Bar) -->
+        <div class="playhead" [style.left.%]="(currentTime / videoDuration) * 100"></div>
+        <!-- Render Cut Markers -->
+        @for (cut of cutMarkers; track cut) {
+          <div
+            class="cut-marker"
+            (click)="selectCutRange(cut)"
+            [style.left.%]="(cut / videoDuration) * 100">
+          </div>
+        }
+
+
+
+
+        <div class="thumbnail-timeline">
+          @for (thumb of thumbnails; track thumb) {
+            <div class="thumbnail-frame">
+              <img [src]="thumb.image" alt="Thumbnail">
+              <div class="thumbnail-timestamp">
+                {{ formatTime(thumb.time) }}
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <!-- <button *ngIf="deleteMode && selectedDeleteRange" (click)="deleteSelectedSection()">
+      Confirm Delete
+    </button> -->
+
+
+
+
+
+    <!-- <div class="thumbnail-preview"
+    *ngIf="thumbnailVisible"
+    [style.left.px]="thumbnailX"
+    [style.top.px]="thumbnailY">
+    <canvas #thumbnailCanvas width="160" height="90"></canvas>
+  </div> -->
+
+
+  <div class="video-editor-tools">
+    <p>Edit the video here...</p>
+    <button (click)="exportEditedVideo()" class="export-button">
+      <i class="fa fa-download"></i> Export Edited Video
+    </button>
+  </div>
+
+  <button (click)="goBack()">Back to Details</button>
+</div>

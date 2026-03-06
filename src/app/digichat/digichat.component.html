@@ -1,0 +1,257 @@
+<!-- DigiChat PAGE -->
+<div class="digichat-container">
+  <!-- header -->
+  <div class="digichat-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="digichat-title">
+            <i class="fas fa-comments"></i>
+            DigiChat
+          </h1>
+          <p class="digichat-subtitle">Connect, Share, and Discuss with the DigiClips Community</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- search and filter -->
+    <div class="search-filter-section">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="search-bar">
+            <input
+              type="text"
+              class="form-control search-input"
+              placeholder="Search posts by keyword, username, or hashtag..."
+              [(ngModel)]="searchQuery"
+              (input)="searchPosts()"
+              (keyup.enter)="searchPosts()">
+            <button class="search-btn" (click)="searchPosts()">
+              <i class="fas fa-search"></i>
+            </button>
+            @if (searchQuery) {
+              <button class="clear-btn" (click)="clearSearch()">
+                <i class="fas fa-times"></i>
+              </button>
+            }
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="sort-dropdown">
+            <select class="form-control" [(ngModel)]="sortBy" (change)="changeSortBy(sortBy)">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="popular">Most Popular</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- create posts -->
+    <!-- (don't show to guests) -->
+    @if (canInteract()) {
+      <div class="create-post-section">
+        <div class="create-post-card">
+          <div class="create-post-header">
+            <i class="fas fa-edit"></i>
+            <span>Share your thoughts with the community</span>
+          </div>
+          <div class="create-post-body">
+            <textarea
+              class="form-control post-textarea"
+              placeholder="What's on your mind? Use #hashtags to categorize your post..."
+              [(ngModel)]="newPostMessage"
+              rows="4"
+              maxlength="500">
+            </textarea>
+            <div class="create-post-footer">
+              <div class="character-count">
+                {{ newPostMessage.length }}/500
+              </div>
+              <button
+                class="btn btn-primary post-btn"
+                (click)="createPost()"
+                [disabled]="!newPostMessage.trim()">
+                <i class="fas fa-paper-plane"></i>
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- for guest users -->
+    @if (!canInteract()) {
+      <div class="guest-notice">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i>
+          You're viewing DigiChat as a guest.
+          <a routerLink="/register" class="alert-link">Create an account</a>
+          or <a routerLink="/login" class="alert-link">sign in</a> to post, like, and reply to messages.
+        </div>
+      </div>
+    }
+
+    <!-- lodaing spinner -->
+    @if (isLoading) {
+      <div class="loading-section">
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading posts...</span>
+          </div>
+          <p class="loading-text">Loading community posts...</p>
+        </div>
+      </div>
+    }
+
+    <!-- feed -->
+    @if (!isLoading) {
+      <div class="posts-feed">
+        <!-- if there's no posts -->
+        @if (filteredPosts.length === 0 && !searchQuery) {
+          <div class="no-posts-message">
+            <div class="text-center">
+              <i class="fas fa-comments fa-3x text-muted"></i>
+              <h4>No posts yet</h4>
+              <p class="text-muted">Be the first to start a conversation in the DigiClips community!</p>
+            </div>
+          </div>
+        }
+        <!-- if there's no search results -->
+        @if (filteredPosts.length === 0 && searchQuery) {
+          <div class="no-results-message">
+            <div class="text-center">
+              <i class="fas fa-search fa-3x text-muted"></i>
+              <h4>No results found</h4>
+              <p class="text-muted">Try searching with different keywords or check your spelling.</p>
+              <button class="btn btn-outline-primary" (click)="clearSearch()">
+                <i class="fas fa-arrow-left"></i>
+                Show All Posts
+              </button>
+            </div>
+          </div>
+        }
+        <!-- post list -->
+        @for (post of filteredPosts; track post) {
+          <div class="post-item">
+            <div class="post-card">
+              <!-- post header -->
+              <div class="post-header">
+                <div class="user-info">
+                  <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                  </div>
+                  <div class="user-details">
+                    <div class="username">{{ post.username }}</div>
+                    <div class="timestamp">{{ formatTimestamp(post.timestamp) }}</div>
+                  </div>
+                </div>
+              </div>
+              <!-- post body -->
+              <div class="post-content">
+                <p class="post-message">{{ post.message }}</p>
+                <!-- tags -->
+                @if (post.tags && post.tags.length > 0) {
+                  <div class="hashtags">
+                    @for (tag of post.tags; track tag) {
+                      <span class="hashtag">
+                        #{{ tag }}
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
+              <!-- post buttons -->
+              <div class="post-actions">
+                <button
+                  class="action-btn like-btn"
+                  [class.liked]="post.isLiked"
+                  (click)="toggleLikePost(post)"
+                  [disabled]="!canInteract()">
+                  <i class="fas fa-heart"></i>
+                  <span>{{ post.likes }}</span>
+                </button>
+                <button
+                  class="action-btn reply-btn"
+                  (click)="toggleReplyBox(post.id)"
+                  [disabled]="!canInteract()">
+                  <i class="fas fa-reply"></i>
+                  <span>{{ post.replies.length }}</span>
+                </button>
+              </div>
+              <!-- reply box -->
+              <!-- TODO: reply submission needs backend integration w/ endpoint: POST /api/digichat/posts/{postId}/replies -->
+              @if (showReplyBox[post.id]) {
+                <div class="reply-box">
+                  <div class="reply-input-section">
+                    <textarea
+                      class="form-control reply-textarea"
+                      placeholder="Write a reply..."
+                      [(ngModel)]="replyMessages[post.id]"
+                      rows="2"
+                      maxlength="300">
+                    </textarea>
+                    <div class="reply-actions">
+                      <div class="character-count">
+                        {{ (replyMessages[post.id] || '').length }}/300
+                      </div>
+                      <button
+                        class="btn btn-sm btn-primary"
+                        (click)="submitReply(post.id)"
+                        [disabled]="!replyMessages[post.id] || !replyMessages[post.id].trim()">
+                        Reply
+                      </button>
+                      <button
+                        class="btn btn-sm btn-outline-secondary"
+                        (click)="toggleReplyBox(post.id)">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+              <!-- Replies Section -->
+              <!-- TODO: backend integration for getting replies w/ endpoint: GET /api/digichat/posts/{postId}/replies -->
+              @if (post.replies && post.replies.length > 0) {
+                <div class="replies-section">
+                  @for (reply of post.replies; track reply) {
+                    <div class="reply-item">
+                      <div class="reply-header">
+                        <div class="user-info">
+                          <div class="user-avatar small">
+                            <i class="fas fa-user-circle"></i>
+                          </div>
+                          <div class="user-details">
+                            <div class="username">{{ reply.username }}</div>
+                            <div class="timestamp">{{ formatTimestamp(reply.timestamp) }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="reply-content">
+                        <p class="reply-message">{{ reply.message }}</p>
+                      </div>
+                      <div class="reply-actions">
+                        <button
+                          class="action-btn like-btn small"
+                          [class.liked]="reply.isLiked"
+                          (click)="toggleLikeReply(reply)"
+                          [disabled]="!canInteract()">
+                          <i class="fas fa-heart"></i>
+                          <span>{{ reply.likes }}</span>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

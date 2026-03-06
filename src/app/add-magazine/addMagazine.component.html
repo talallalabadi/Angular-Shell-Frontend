@@ -1,0 +1,41 @@
+<div class="outermost-container">
+  <div class="container main-text-box">
+    Add a New Magazine
+  </div>
+  <div class="container addMagazine-box">
+    <div class="row">
+      <label for="name-input" class="col-form-label right-align-label col-md-3">
+        Magazine Name
+      </label>
+      <input id="name-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.name">
+      <label for="country-input" class="col-form-label right-align-label col-md-3">
+        Country
+      </label>
+      <input id="country-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.country">
+    </div>
+    <div class="row">
+      <label for="state-input" class="col-form-label right-align-label col-md-3">
+        State/Province
+      </label>
+      <input id="state-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.state">
+      <label for="city-input" class="col-form-label right-align-label col-md-3">
+        City
+      </label>
+      <input id="city-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.city">
+    </div>
+    <div class="row">
+      <label for="home-URL-input" class="col-form-label right-align-label col-md-3">
+        URL to Magazine's Home Page
+      </label>
+      <input id="home-URL-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.url">
+      <label for="rss-URL-input" class="col-form-label right-align-label col-md-3">
+        URL to Magazine RSS Feed
+      </label>
+      <input id="rss-URL-input" class="form-control addMagazine-item col-md-3" [(ngModel)]="magazine.rss">
+    </div>
+    <div class="text-center">
+      <button [disabled]="!checkFilled()" class="btn btn-outline-primary submit-button"
+              (click)="addMagazine()">Add Magazine</button>
+    </div>
+  </div>
+</div>

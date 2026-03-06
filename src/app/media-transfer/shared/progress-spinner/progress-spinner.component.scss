@@ -1,0 +1,19 @@
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5vh;
+  margin-left: 5vh;
+  margin-right: 5vh;
+  margin-bottom: 5vh;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 2vh;
+  margin-left: 5vh;
+  margin-right: 5vh;
+  color: #555;
+}

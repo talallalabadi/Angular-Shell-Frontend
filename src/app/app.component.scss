@@ -1,0 +1,194 @@
+/* Styles for the navbar */
+.navbar {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Center items vertically */
+}
+
+/* Center the navbar links */
+.navbar-nav {
+    display: flex; 
+    justify-content: right; /* Center the nav links */
+    flex-grow: 1; 
+}
+
+/* Styling for nav links */
+.navbar-nav .nav-link {
+    color: #000000;
+    margin: 0 15px; /* Add margin for spacing between links */
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Hover effect for nav links */
+.navbar-nav .nav-link:hover {
+    background-color: rgba(211, 211, 211, 0.747);
+    border-radius: 5px;
+    color: black;
+}
+
+/*submenu styles*/
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f9f9f9;
+    min-width: 130px;
+    box-shadow: 0px 15px 25px rgba(0,0,0,0.2);
+    z-index: 1;
+    transition: all ease 0.5s;
+}
+
+ 
+.navbar-nav .nav-item { 
+    position: relative;
+}
+
+/* shows the submenu on hover */
+.navbar-nav .nav-item:hover > .submenu { 
+    display: inline-block;
+    list-style: none;
+    margin: 0 20px;
+    padding-left: 0px;
+}
+
+.wrapper-dropdown-2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 10px 15px;
+    background: #fff;
+    border-left: 5px solid grey;
+    cursor: pointer;
+    outline: none;
+}
+
+/* Dropdown styles */
+.wrapper-dropdown-2:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    margin-top: -3px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: grey transparent;
+}
+
+.wrapper-dropdown-2 .dropdown {
+    position: absolute;
+    top: 60%;
+    left: -45px;
+    right: 0px;
+    background: white;
+    transition: all 0.3s ease-out;
+    list-style: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wrapper-dropdown-2 .dropdown li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    border-left: 5px solid;
+    padding: 10px;
+    transition: all 0.3s ease-out;
+}
+
+.wrapper-dropdown-2 .dropdown li:nth-child(1) a {
+    border-left-color: #00ACED;
+}
+
+.wrapper-dropdown-2 .dropdown li:nth-child(2) a {
+    border-left-color: #4183C4;
+}
+
+.wrapper-dropdown-2 .dropdown li:nth-child(3) a {
+    border-left-color: #3B5998;
+}
+
+.wrapper-dropdown-2 .dropdown li:hover a {
+    color: grey;
+    background-color: darkgrey;
+}
+
+.wrapper-dropdown-2.active:after {
+    border-width: 0 6px 6px 6px;
+}
+
+.wrapper-dropdown-2.active .dropdown {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Sign out button styles */
+.navbar-nav .nav-link.sign-out {
+    background-color: #f8f9fa; /* Light background color */
+    color: #000; /* Text color */
+    border: 1px solid #000000; /* Border color */
+    border-radius: 20px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for the button */
+    transition: background-color 0.3s, color 0.3s; /* Transition effects */
+}
+
+/* Hover effect for sign out button */
+.navbar-nav .nav-link.sign-out:hover {
+    background-color: #000000; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* Spinner Container */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    background-color: #f3f3f3;
+  }
+  
+  /* Spinner Animation */
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  } 
+  
+  /* Hide when thumbnail loads */
+  .thumbnail-loaded .loading-container {
+    display: none;
+  } 
+  
+  /* Thumbnail styling */
+  .thumbnail {
+    width: 100px;
+    height: 100px;
+    display: block;
+  } 
+  
+  /* Hide thumbnail until loaded */
+  .thumbnail:not([src]) {
+    display: none;
+  }
+  

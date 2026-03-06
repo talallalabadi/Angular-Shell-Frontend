@@ -1,0 +1,29 @@
+<div class="language-selector">
+  <div>
+    <input
+      type="text"
+      id="filter-bar"
+      class="form-control search-item"
+      [value]="isFocused ? filterText : selectedLanguage"
+      placeholder="Filter Languages"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (input)="onFilterChange($event.target.value)"
+      >
+
+    @if (isOpen) {
+      <div class="language-list-container">
+        @for (letter of (groupedLanguages | keyvalue); track letter) {
+          <div>
+            <app-language-row
+              [letter]="letter.key"
+              [languages]="letter.value"
+              (languageSelected)="onLanguageSelected($event)">
+            </app-language-row>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>
