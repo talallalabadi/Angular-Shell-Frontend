@@ -3,3 +3,4 @@ Only the src/app folder is included to demonstrate development work.
 The full runnable project exists in the Company's repository.
 
 UPDATED README (03/06/2026)
+Team and Product report done
